@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import "lazysizes";
+import TopAppBar from "../components/organisms/TopAppBar";
+import { ThemeProvider } from "@/lib/provider/theme-provider";
+import Footer from "@/components/organisms/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +16,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="ko">
+      <body className={"font-['Pretendard-Regular']"}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TopAppBar />
+          <main className="w-full max-w-[1478px] min-h-[calc(100vh-64px)] flex flex-col gap-[16px] Expanded:gap-[24px] Large:gap-[48px] ExtraLarge:gap-[64px]">
+            {children}
+          </main>
+          <Footer />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

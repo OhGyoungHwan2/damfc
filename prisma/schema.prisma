@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model player {
+  id               Int    @id @map("_id")
+  acceleration     Int
+  aggression       Int
+  agility          Int
+  balance          Int
+  ballcontrol      Int
+  bp1 Int?
+  bp2 Int?
+  bp3 Int?
+  bp4 Int?
+  bp5 Int?
+  bp6 Int?
+  bp7 Int?
+  bp8 Int?
+  bp9 Int?
+  bp10 Int?
+  composure        Int
+  crossing         Int
+  curve            Int
+  dribbling        Int
+  finishing        Int
+  freekickaccuracy Int
+  gkdiving         Int
+  gkhandling       Int
+  gkkicking        Int
+  gkpositioning    Int
+  gkreflexes       Int
+  headingaccuracy  Int
+  height           Int
+  imgSrc           String
+  interceptions    Int
+  jumping          Int
+  longpassing      Int
+  longshots        Int
+  mainfoot         Int
+  marking          Int
+  name             String
+  nation           String
+  ovr              Int
+  pay              Int
+  penalties        Int
+  physical         Int
+  pid              Int
+  position         String
+  positioning      Int
+  reactions        Int
+  season           String
+  shortpassing     Int
+  shotpower        Int
+  skillmove        Int
+  slidingtackle    Int
+  sprintspeed      Int
+  stamina          Int
+  standingtackle   Int
+  strength         Int
+  trait0           Int
+  trait1           Int
+  trait11          Int
+  trait12          Int
+  trait13          Int
+  trait14          Int
+  trait15          Int
+  trait16          Int
+  trait17          Int
+  trait18          Int
+  trait19          Int
+  trait20          Int
+  trait21          Int
+  trait22          Int
+  trait23          Int
+  trait24          Int
+  trait25          Int
+  trait27          Int
+  trait28          Int
+  trait29          Int
+  trait3           Int
+  trait4           Int
+  trait41          Int
+  trait42          Int
+  trait43          Int
+  trait48          Int
+  trait49          Int
+  trait5           Int
+  trait6           Int
+  trait7           Int
+  trait9           Int
+  vision           Int
+  volleys          Int
+  weakfoot         Int
+  weight           Int
+  imgId String
+  teamcolors      teamcolor_player[]
+  playerSimilarityPlayer      player_similarity[] @relation("players")
+  playerSimilaritySimPlayer       player_similarity[] @relation("simPlayers")
+  recommends recommend[]
+  rankerPlayer ranker_player[]
+}
+
+model player_similarity {
+  id          String @id @map("_id")
+  playerId    Int
+  playerSimId Int
+  rank        Int
+  players   player @relation(fields: [playerId], references: [id], name: "players")
+  simPlayers   player @relation(fields: [playerSimId], references: [id], name: "simPlayers")
+  @@index([playerId], map: "playerId_1")
+}
+
+model ranker {
+  id         Int @id @map("_id")
+  controller String
+  matchId    String
+  nickname   String
+  ouid       String
+  players ranker_player[]
+}
+
+model ranker_player {
+  id       String @id @map("_id")
+  grade    Int
+  playerId Int
+  position Int
+  rankerId Int
+
+  ranker ranker @relation(fields: [rankerId], references: [id])
+  player player? @relation(fields: [playerId], references: [id])
+  @@index([rankerId], map: "rankerId_1")
+}
+
+model recommend {
+  id               String @id @map("_id")
+  category         String
+  playerId         Int
+  rank             Int
+  subcategory      String
+  subcategoryOrder Int
+
+  player player? @relation(fields: [playerId], references: [id])
+}
+
+model teamcolor {
+  id             Int     @id @map("_id")
+  ability1       String
+  ability1Status Int
+  ability2       String?
+  ability2Status Int
+  ability3       String?
+  ability3Status Int
+  ability4       String?
+  ability4Status Int
+  category       String
+  level          String
+  name           String
+  player teamcolor_player[]
+}
+
+model teamcolor_player {
+  id          String @id @map("_id")
+  playerId    Int
+  teamColorId Int
+
+  player player @relation(fields: [playerId], references: [id])
+  team teamcolor @relation(fields: [teamColorId], references: [id])
+
+  @@index([playerId], map: "playerId_1")
+  @@index([teamColorId], map: "teamColorId_1")
+}
