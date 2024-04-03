@@ -19,6 +19,13 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   // 데이터
   const { player, simPlayers, teamcolors } = playerResponse;
 
+  let log = "";
+  simPlayers.map((player, idx) => {
+    idx % 3 === 0 && (log += "\n");
+    log += `[${idx + 1}위${player.season}${player.name}], `;
+  });
+  console.log(log);
+
   const createCommandItems = (values: number[]) =>
     values.map((value) => ({
       value: teamcolors.affiliation[value].name,
