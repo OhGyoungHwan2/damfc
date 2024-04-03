@@ -36,4 +36,12 @@ yarn-error.log*
 next-env.d.ts
 
 # 이미지 파일
-/public/player/*.AVIF
+/public/player/*0.AVIF
+/public/player/*1.AVIF
+/public/player/*2.AVIF
+/public/player/*3.AVIF
+/public/player/*4.AVIF
+/public/player/*5.AVIF
+/public/player/*6.AVIF
+/public/player/*7.AVIF
+/public/player/*8.AVIF
