@@ -38,4 +38,3 @@ next-env.d.ts
 # 이미지 파일
 /public/player/*0.AVIF
 /public/player/*1.AVIF
-/public/player/*2.AVIF
