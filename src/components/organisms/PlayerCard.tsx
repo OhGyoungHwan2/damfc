@@ -86,7 +86,7 @@ const PlayerCardThumbnail: React.FC<PlayerCardThumbnailProps> = ({
   return (
     <div className="relative">
       <ImageAspectRatio
-        imgSrc={`/player/${imgId}.AVIF`}
+        imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${imgId}.AVIF?raw=true`}
         width={isBp ? 110 : 64}
         alt={`${season}${name}이미지`}
       />

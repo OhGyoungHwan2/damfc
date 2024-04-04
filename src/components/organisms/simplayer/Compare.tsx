@@ -40,7 +40,7 @@ export const ComparePlayerCard: React.FC<ComparePlayerCardProps> = ({
       <div className="w-1/3 Medium:w-1/4">
         <ImageAspectRatio
           key={`${player.id}`}
-          imgSrc={`/player/${player.imgId}.AVIF`}
+          imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${player.imgId}.AVIF?raw=true`}
           width={"100%"}
           alt={`${player.season}${player.name}이미지`}
         />

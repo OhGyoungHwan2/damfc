@@ -20,7 +20,7 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
         width={0}
         height={0}
         sizes="100vw"
-        src={`${imgSrc}?raw=true`}
+        src={`${imgSrc}`}
         className={cn("w-full h-auto", className)}
         alt={alt}
         placeholder={"empty"}

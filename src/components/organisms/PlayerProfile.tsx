@@ -45,7 +45,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({
   return (
     <div className={cn("relative flex flex-col items-center", widthClassName)}>
       <ImageAspectRatio
-        imgSrc={`/player/${player.imgId}.AVIF`}
+        imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${player.imgId}.AVIF?raw=true`}
         width={"100%"}
         alt={`${player.season}${player.name}이미지`}
       />
