@@ -13,7 +13,7 @@ const Search: React.FC<{
         <div>
           <h3>검색 결과</h3>
         </div>
-        <div className="flex flex-wrap justify-center w-full gap-2">
+        <div className="flex flex-wrap justify-start w-full gap-2">
           {players.map((player) => (
             <Link
               href={`/player/${player.id}`}

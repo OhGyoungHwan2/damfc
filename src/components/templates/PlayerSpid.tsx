@@ -38,7 +38,8 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
         defaultPlayerLeft={player}
         defaultPlayerRight={simPlayers[0]}
       >
-        <section className="Expanded:w-[calc(100%-360px)]">
+        <section className="Expanded:w-[calc(100%-360px)] h-[calc(100vh-218px)] flex flex-col justify-between">
+          {/* ComparePlayerCard, AddSelect */}
           <section className="h-[220px] grid grid-cols-6 items-center gap-0.5 Expanded:gap-2">
             <div className="self-start col-span-2">
               <ComparePlayerCard type="left" />
@@ -56,12 +57,14 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
               <AddSelect type="right" teamcolors={teamcolors} />
             </div>
           </section>
-          <section className="h-[210px] Expanded:h-[400px] ">
+          {/* Table */}
+          <section className="h-[210px] Medium:h-[300px] Expanded:h-[400px] ">
             <Table />
           </section>
         </section>
         <PlayerScrollProvider>
-          <section className="h-[146px] Expanded:h-[calc(100vh-64px)] Expanded:w-[360px]">
+          {/* PlayerScroll */}
+          <section className="h-[154px] Expanded:h-[calc(100vh-64px)] Expanded:w-[360px]">
             <div className="flex items-center gap-1">
               <PlayerScrollFilter
                 commandItems={createCommandItems(
