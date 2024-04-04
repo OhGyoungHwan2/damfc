@@ -3,7 +3,7 @@ import PlayerSpid from "@/components/templates/PlayerSpid";
 
 async function getPlayer(postId: string) {
   const res = await fetch(`${process.env.BASE_URL}/api/player/${postId}`, {
-    next: { revalidate: 60 },
+    cache: "force-cache",
   });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
