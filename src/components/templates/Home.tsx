@@ -35,7 +35,7 @@ const Home: React.FC<{
           {type === "img" && (
             <ImageAspectRatio
               width={20}
-              imgSrc={`/season/${value}.png`}
+              imgSrc={`/season/${value.toLowerCase()}.png`}
               alt={`${value}이미지`}
             />
           )}
