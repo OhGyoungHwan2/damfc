@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     minimumCacheTTL: 86400,
     domains: ["localhost", "github.com"],
+    unoptimized: true,
   },
 };
 

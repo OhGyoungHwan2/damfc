@@ -37,13 +37,18 @@ export const PlayerCompareProvider: React.FC<{
   const [leftAddStatus, setLeftAddStatus] = useState<TSelectAddStatus>({});
   const [rightAddStatus, setRightAddStatus] = useState<TSelectAddStatus>({});
 
+  const onChangePlayerLeft = (player: TGETPlayer["player"]) =>
+    setPlayerLeft({ ...player });
+  const onChangePlayerRight = (player: TGETPlayer["player"]) =>
+    setPlayerRight({ ...player });
+
   return (
     <PlayerCompareContext.Provider
       value={{
         playerLeft,
-        setPlayerLeft,
+        setPlayerLeft: onChangePlayerLeft,
         playerRight,
-        setPlayerRight,
+        setPlayerRight: onChangePlayerRight,
         leftAddStatus,
         setLeftAddStatus,
         rightAddStatus,

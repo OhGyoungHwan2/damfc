@@ -14,7 +14,7 @@ const StateLayer: React.FC<StateLayerProps> = ({
       {children}
       <div
         className={cn(
-          "inset-0 absolute opacity-0 hover:opacity-[8%] focus:opacity-[10%]",
+          "inset-0 absolute opacity-0 hover:opacity-[8%] focus:opacity-[10%] pointer-events-none",
           className
         )}
       />

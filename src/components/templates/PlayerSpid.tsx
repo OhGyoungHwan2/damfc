@@ -26,10 +26,13 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   });
   console.log(log);
 
-  const createCommandItems = (values: number[]) =>
+  const createCommandItems = (
+    values: number[],
+    type: "affiliation" | "feature"
+  ) =>
     values.map((value) => ({
-      value: teamcolors.affiliation[value].name,
-      node: <div key={value}>{teamcolors.affiliation[value].name}</div>,
+      value: teamcolors[type][value].name,
+      node: <div key={value}>{teamcolors[type][value].name}</div>,
     }));
 
   return (
@@ -58,7 +61,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             </div>
           </section>
           {/* Table */}
-          <section className="h-[210px] Medium:h-[300px] Expanded:h-[400px] ">
+          <section className="h-[210px] Medium:h-[250px] Expanded:h-[400px] ">
             <Table />
           </section>
         </section>
@@ -66,19 +69,27 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
           {/* PlayerScroll */}
           <section className="h-[154px] Expanded:h-[calc(100vh-64px)] Expanded:w-[360px]">
             <div className="flex items-center gap-1">
+              <PlayerScrollFilterReset />
               <PlayerScrollFilter
                 commandItems={createCommandItems(
                   Object.entries(teamcolors.affiliation).map(([key]) =>
                     parseInt(key)
-                  )
+                  ),
+                  "affiliation"
                 )}
+                type="affiliation"
               />
-              <PlayerScrollFilterReset />
+              <PlayerScrollFilter
+                commandItems={createCommandItems(
+                  Object.entries(teamcolors.feature).map(([key]) =>
+                    parseInt(key)
+                  ),
+                  "feature"
+                )}
+                type="feature"
+              />
             </div>
-            <PlayerScroll
-              players={simPlayers}
-              teamcolors={teamcolors.affiliation}
-            />
+            <PlayerScroll players={simPlayers} teamcolors={teamcolors} />
           </section>
         </PlayerScrollProvider>
       </PlayerCompareProvider>

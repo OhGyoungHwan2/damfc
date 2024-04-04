@@ -74,6 +74,15 @@ const Combobox: React.FC<ComboboxProps> = ({
               type="always"
             >
               <div className="h-max">
+                {!defaultValue && (
+                  <CommandItem
+                    key={"none"}
+                    value={""}
+                    onSelect={onSelectCombobox}
+                  >
+                    -
+                  </CommandItem>
+                )}
                 {commandItems.map((commandItem) => (
                   <CommandItem
                     key={commandItem.value}

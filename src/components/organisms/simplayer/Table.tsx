@@ -25,7 +25,7 @@ const Table: React.FC = () => {
 
   return (
     <ScrollArea className="size-full">
-      <div className="flex flex-col flex-wrap w-max h-[210px] Medium:h-[300px] Expanded:h-[400px] mx-auto">
+      <div className="flex flex-col flex-wrap w-max h-[210px] Medium:h-[250px] Expanded:h-[400px] mx-auto">
         {statusOrder.map((statusKey) => {
           const leftCell =
             playerLeft[statusKey] + addStatus2point(leftAddStatus, statusKey);
