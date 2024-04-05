@@ -3,10 +3,10 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { TGETRecommend, TRecommend } from "@/app/api/recommend/route";
 import { TGETRanker, TRanker } from "@/app/api/ranker/route";
 import {
-  ComboboxTabsCombobox,
-  ComboboxTabsProvider,
-  ComboboxTabsTabs,
-} from "../organisms/recommend/ComboboxTabs";
+  SelectTabsSelect,
+  SelectTabsProvider,
+  SelectTabsTabs,
+} from "../organisms/recommend/SelectTabs";
 import PlayerCard from "../organisms/PlayerCard";
 import StateLayer from "../atoms/StateLayer";
 import ImageAspectRatio from "../molecules/ImageAspectRatio";
@@ -24,7 +24,7 @@ const Home: React.FC<{
     responseRanker;
 
   // 계산
-  const createCommendItems = (values: string[], type?: "img" | "ranker") =>
+  const createSelectItems = (values: string[], type?: "img" | "ranker") =>
     values.map((value) => ({
       value: value,
       node: (
@@ -40,7 +40,7 @@ const Home: React.FC<{
             />
           )}
           {type === "ranker" && (
-            <small className="absolute top-0 left-0 text-xs -translate-y-1/2 bg-background text-nowrap text-muted-foreground">
+            <small className="text-xs bg-background text-nowrap text-muted-foreground">
               {rankers[value].controller === "keyboard"
                 ? "키보드"
                 : rankers[value].controller === "gamepad"
@@ -108,45 +108,43 @@ const Home: React.FC<{
         최고의 선수찾기!
       </h2>
       <section className="relative">
-        <ComboboxTabsProvider defaultValue={positions[0]}>
+        <SelectTabsProvider defaultValue={positions[0]}>
           <h3 className="px-[16px] Expanded:px-[62px] Large:px-[106px]">
             <small className="text-muted-foreground">{`포지션별 최고의 가치, 지금 바로 만나보세요!`}</small>
             <div className="flex items-center justify-between">
               {`포지션 추천`}{" "}
-              <ComboboxTabsCombobox
-                commandItems={createCommendItems(positions)}
-              />
+              <SelectTabsSelect selectItems={createSelectItems(positions)} />
             </div>
           </h3>
           <div className="pl-[16px] Expanded:pl-[62px] Large:pl-[106px]">
-            <ComboboxTabsTabs tabItems={createTabItems(recommendPositions)} />
+            <SelectTabsTabs tabItems={createTabItems(recommendPositions)} />
           </div>
-        </ComboboxTabsProvider>
+        </SelectTabsProvider>
       </section>
       <section className="relative">
-        <ComboboxTabsProvider defaultValue={seasons[0]}>
+        <SelectTabsProvider defaultValue={seasons[0]}>
           <h3 className="px-[16px] Expanded:px-[62px] Large:px-[106px]">
             <small className="text-muted-foreground">{`시즌별 최고의 가치, 지금 바로 만나보세요!`}</small>
             <div className="flex items-center justify-between">
               {`시즌 추천`}
-              <ComboboxTabsCombobox
-                commandItems={createCommendItems(seasons, "img")}
+              <SelectTabsSelect
+                selectItems={createSelectItems(seasons, "img")}
               />
             </div>
           </h3>
           <div className="pl-[16px] Expanded:pl-[62px] Large:pl-[106px]">
-            <ComboboxTabsTabs tabItems={createTabItems(recommendSeasons)} />
+            <SelectTabsTabs tabItems={createTabItems(recommendSeasons)} />
           </div>
-        </ComboboxTabsProvider>
+        </SelectTabsProvider>
       </section>
       <section>
-        <ComboboxTabsProvider defaultValue={gamepadRankers[0]}>
+        <SelectTabsProvider defaultValue={gamepadRankers[0]}>
           <h3 className="px-[16px] Expanded:px-[62px] Large:px-[106px]">
             <small className="text-muted-foreground">{`랭커가 사용하는 최고의 스쿼드!`}</small>
             <div className="flex items-center justify-between">
               {`랭커 스쿼드`}
-              <ComboboxTabsCombobox
-                commandItems={createCommendItems(
+              <SelectTabsSelect
+                selectItems={createSelectItems(
                   [...keyboardRankers, ...gamepadRankers, ...etcRankers],
                   "ranker"
                 )}
@@ -154,9 +152,9 @@ const Home: React.FC<{
             </div>
           </h3>
           <div className="pl-[16px] Expanded:pl-[62px] Large:pl-[106px]">
-            <ComboboxTabsTabs tabItems={createStadiums(rankers)} />
+            <SelectTabsTabs tabItems={createStadiums(rankers)} />
           </div>
-        </ComboboxTabsProvider>
+        </SelectTabsProvider>
       </section>
     </section>
   );

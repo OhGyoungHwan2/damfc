@@ -8,32 +8,40 @@ import { AddSelect } from "../organisms/simplayer/AddSelect";
 import {
   PlayerScroll,
   PlayerScrollFilter,
+  PlayerScrollFilterFix,
   PlayerScrollFilterReset,
   PlayerScrollProvider,
 } from "../organisms/simplayer/PlayerScroll";
 import Table from "../organisms/simplayer/Table";
+import { cookies } from "next/headers";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   playerResponse,
 }) => {
   // 데이터
   const { player, simPlayers, teamcolors } = playerResponse;
+  const cookieStore = cookies();
+  const condition = cookieStore.get("condition");
+  const conditionObj = JSON.parse(condition?.value || "{}");
 
-  let log = "";
-  simPlayers.map((player, idx) => {
-    idx % 3 === 0 && (log += "\n");
-    log += `[${idx + 1}위${player.season}${player.name}], `;
-  });
-  console.log(log);
+  // let log = "";
+  // simPlayers.map((player, idx) => {
+  //   idx % 3 === 0 && (log += "\n");
+  //   log += `[${idx + 1}위${player.season}${player.name}], `;
+  // });
+  // console.log(log);
 
-  const createCommandItems = (
+  const createTeamSelectItems = (
     values: number[],
     type: "affiliation" | "feature"
-  ) =>
-    values.map((value) => ({
-      value: teamcolors[type][value].name,
-      node: <div key={value}>{teamcolors[type][value].name}</div>,
-    }));
+  ) => [
+    { value: "0", node: <>-</> },
+    ...values.map((value) => ({
+      value: `${teamcolors[type][value].name}`,
+      node: <>{teamcolors[type][value].name}</>,
+    })),
+  ];
 
   return (
     <section className="flex flex-col Expanded:flex-row max-w-[905px] mx-auto w-full justify-between">
@@ -65,30 +73,25 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             <Table />
           </section>
         </section>
-        <PlayerScrollProvider>
+        <PlayerScrollProvider defaultCondition={conditionObj}>
           {/* PlayerScroll */}
           <section className="h-[154px] Expanded:h-[calc(100vh-64px)] Expanded:w-[360px]">
-            <div className="flex items-center gap-1">
-              <PlayerScrollFilterReset />
-              <PlayerScrollFilter
-                commandItems={createCommandItems(
-                  Object.entries(teamcolors.affiliation).map(([key]) =>
-                    parseInt(key)
-                  ),
-                  "affiliation"
-                )}
-                type="affiliation"
-              />
-              <PlayerScrollFilter
-                commandItems={createCommandItems(
-                  Object.entries(teamcolors.feature).map(([key]) =>
-                    parseInt(key)
-                  ),
-                  "feature"
-                )}
-                type="feature"
-              />
-            </div>
+            <ScrollArea className="w-full">
+              <div className="flex items-center gap-1 w-max">
+                <PlayerScrollFilterReset />
+                <PlayerScrollFilterFix />
+                <PlayerScrollFilter
+                  selectItems={createTeamSelectItems(
+                    Object.keys(teamcolors.affiliation).map((key) =>
+                      parseInt(key)
+                    ),
+                    "affiliation"
+                  )}
+                  type="affiliation"
+                />
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
             <PlayerScroll players={simPlayers} teamcolors={teamcolors} />
           </section>
         </PlayerScrollProvider>

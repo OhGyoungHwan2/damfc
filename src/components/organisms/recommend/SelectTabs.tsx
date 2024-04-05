@@ -1,42 +1,44 @@
 "use client";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import Combobox from "@/components/molecules/Combobox";
+import Select from "@/components/molecules/Select";
 import { createContext, useContext, useState } from "react";
 
-type ComboboxTabsType = {
+type SelectTabsType = {
   value: string;
   onSelctCallback: (value: string) => void;
 };
-const ComboboxTabsContext = createContext<ComboboxTabsType>({
+const SelectTabsContext = createContext<SelectTabsType>({
   value: "",
   onSelctCallback: () => {},
 });
 
-const useComboboxTabsContext = () => useContext(ComboboxTabsContext);
+const useSelectTabsContext = () => useContext(SelectTabsContext);
 
-export const ComboboxTabsCombobox: React.FC<{
-  commandItems: {
+export const SelectTabsSelect: React.FC<{
+  selectItems: {
     value: string;
     node: React.ReactNode;
   }[];
-}> = ({ commandItems }) => {
-  const { onSelctCallback } = useComboboxTabsContext();
+}> = ({ selectItems }) => {
+  const { onSelctCallback } = useSelectTabsContext();
   return (
-    <Combobox
-      commandItems={commandItems}
-      defaultValue={commandItems[0].value}
-      onSelctCallback={onSelctCallback}
-    />
+    <div className="w-[150px]">
+      <Select
+        selectItems={selectItems}
+        defaultValue={selectItems[0].value}
+        onSelctCallback={onSelctCallback}
+      />
+    </div>
   );
 };
 
-export const ComboboxTabsTabs: React.FC<{
+export const SelectTabsTabs: React.FC<{
   tabItems: {
     value: string;
     node: React.ReactNode;
   }[];
 }> = ({ tabItems }) => {
-  const { value } = useComboboxTabsContext();
+  const { value } = useSelectTabsContext();
   return (
     <Tabs value={value} className="w-full">
       {tabItems.map((tabItem) => (
@@ -48,20 +50,20 @@ export const ComboboxTabsTabs: React.FC<{
   );
 };
 
-export const ComboboxTabsProvider: React.FC<{
+export const SelectTabsProvider: React.FC<{
   children: React.ReactNode;
   defaultValue: string;
 }> = ({ children, defaultValue }) => {
   const [value, setValue] = useState(defaultValue);
   const onSelctCallback = (value: string) => setValue(value.toUpperCase());
   return (
-    <ComboboxTabsContext.Provider
+    <SelectTabsContext.Provider
       value={{
         value,
         onSelctCallback,
       }}
     >
       {children}
-    </ComboboxTabsContext.Provider>
+    </SelectTabsContext.Provider>
   );
 };

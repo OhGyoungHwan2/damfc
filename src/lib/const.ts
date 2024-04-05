@@ -127,24 +127,24 @@ export const number2physical = {
 } as const;
 
 export const enhance = {
-  1: { all: 0 },
-  2: { all: 1 },
-  3: { all: 2 },
-  4: { all: 4 },
-  5: { all: 6 },
-  6: { all: 8 },
-  7: { all: 11 },
-  8: { all: 15 },
-  9: { all: 19 },
-  10: { all: 24 },
+  "1": { all: 0 },
+  "2": { all: 1 },
+  "3": { all: 2 },
+  "4": { all: 4 },
+  "5": { all: 6 },
+  "6": { all: 8 },
+  "7": { all: 11 },
+  "8": { all: 15 },
+  "9": { all: 19 },
+  "10": { all: 24 },
 } as const;
 
 export const adaptability = {
-  1: { all: 0 },
-  2: { all: 1 },
-  3: { all: 2 },
-  4: { all: 3 },
-  5: { all: 4 },
+  "1": { all: 0 },
+  "2": { all: 1 },
+  "3": { all: 2 },
+  "4": { all: 3 },
+  "5": { all: 4 },
 } as const;
 
 export const enhanceTeamcolor = {

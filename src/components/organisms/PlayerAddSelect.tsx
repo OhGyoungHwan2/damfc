@@ -43,15 +43,18 @@ const PlayerAddSelect: React.FC<PlayerAddSelectProps> = ({
     selectValues: string[] | number[],
     type: TAddStatusSelectCategory
   ) => {
-    return selectValues.map((value) => (
-      <SelectItem key={`${value}div`} value={`${value}`}>
-        {type === "enhance" ||
-        type === "adaptability" ||
-        type === "enhanceTeamcolor"
-          ? value
-          : teamcolors[type][parseInt(`${value}`)].name}
-      </SelectItem>
-    ));
+    return selectValues.map((value) => ({
+      value: `${value}`,
+      node: (
+        <>
+          {type === "enhance" ||
+          type === "adaptability" ||
+          type === "enhanceTeamcolor"
+            ? value
+            : teamcolors[type][parseInt(`${value}`)].name}
+        </>
+      ),
+    }));
   };
 
   const createTeamcolorStatus = (
@@ -89,7 +92,7 @@ const PlayerAddSelect: React.FC<PlayerAddSelectProps> = ({
   ) => {
     return (value: string) =>
       setAddStatus((pre) => {
-        return value == "0"
+        return value == "0" || value == ""
           ? { ...pre, [type]: {} }
           : { ...pre, [type]: option[value] };
       });
@@ -173,7 +176,7 @@ const PlayerAddSelect: React.FC<PlayerAddSelectProps> = ({
 };
 
 type TSelect = {
-  selectItems: React.ReactNode[];
+  selectItems: { value: string; node: React.ReactNode }[];
   onValueChange: (value: string) => void;
   defaultValue?: string;
   className?: string;
@@ -187,26 +190,61 @@ const Select: React.FC<TSelect> = ({
   label,
 }) => {
   return (
-    <SelectContainer defaultValue={defaultValue} onValueChange={onValueChange}>
-      <SelectTrigger className={cn(className, "relative")}>
-        {label && (
-          <small className="absolute top-0 text-xs -translate-y-1/2 left-1 text-muted-foreground">
-            {label}
-          </small>
-        )}
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {!defaultValue && (
-            <SelectItem key={`SelectItem0`} value={"0"}>
-              {"-"}
-            </SelectItem>
+    <>
+      <SelectContainer
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+      >
+        <SelectTrigger className={cn(className, "relative hidden Medium:flex")}>
+          {label && (
+            <small className="absolute top-0 text-xs -translate-y-1/2 left-1 text-muted-foreground">
+              {label}
+            </small>
           )}
-          {selectItems.map((_, idx) => selectItems[idx])}
-        </SelectGroup>
-      </SelectContent>
-    </SelectContainer>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {!defaultValue && (
+              <SelectItem key={`SelectItem0`} value={"0"}>
+                {"-"}
+              </SelectItem>
+            )}
+            {selectItems.map((selectItem) => (
+              <SelectItem key={selectItem.value} value={selectItem.value}>
+                {selectItem.node}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </SelectContainer>
+      <select
+        onChange={(e) => onValueChange(e.target.value)}
+        className={cn(
+          className,
+          "Medium:hidden flex h-9 items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+        )}
+      >
+        {!defaultValue && (
+          <option
+            key="default"
+            value={""}
+            className="bg-popover text-popover-foreground"
+          >
+            -
+          </option>
+        )}
+        {selectItems.map((selectItem) => (
+          <option
+            key={selectItem.value}
+            value={selectItem.value}
+            className="bg-popover text-popover-foreground"
+          >
+            {selectItem.node}
+          </option>
+        ))}
+      </select>
+    </>
   );
 };
 

@@ -70,14 +70,11 @@ export const ComparePlayerCard: React.FC<ComparePlayerCardProps> = ({
   );
 };
 
-interface CompareRadarProps {
-  isGK?: boolean;
-}
-export const CompareRadar: React.FC<CompareRadarProps> = ({ isGK }) => {
+export const CompareRadar: React.FC = () => {
   const { playerLeft, playerRight, leftAddStatus, rightAddStatus } =
     usePlayerCompareContext();
 
-  const statusKey = isGK ? statusGK : status;
+  const statusKey = playerLeft.position === "GK" ? statusGK : status;
   const pickStatus = (player: TGETPlayer["player"], keys: string[]) => {
     return Object.fromEntries(
       keys.map((key) => [key, player[key as keyof typeof statusKey]])

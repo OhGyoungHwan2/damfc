@@ -12,10 +12,11 @@ import {
   useContext,
   useState,
 } from "react";
-import Combobox from "@/components/molecules/Combobox";
+import Select from "@/components/molecules/Select";
 import { Button } from "@/components/ui/button";
 import { status, statusGK } from "@/lib/const";
 import { usePlayerCompareContext } from "@/context/store";
+import { deleteCookies, setCookies } from "@/lib/actions";
 
 type allCondition =
   | keyof typeof status
@@ -26,7 +27,7 @@ type allCondition =
   | "weakfoot"
   | "physical";
 
-type TCondition = Partial<
+export type TCondition = Partial<
   Record<
     allCondition,
     | string
@@ -87,8 +88,10 @@ export const PlayerScroll: React.FC<PlayerScrollProps> = ({
     ])
   );
   // 계산
-  const playerFilter = (players: TGETPlayer["simPlayers"]) => {
-    return players.filter((player) => {
+  const playerFilter = (
+    players: { player: TGETPlayer["simPlayers"][0]; node: React.ReactNode }[]
+  ) => {
+    return players.filter(({ player }) => {
       const booleans = Object.entries(condition).map(([key, value]) => {
         if (["affiliation", "feature"].includes(key)) {
           return (
@@ -119,21 +122,29 @@ export const PlayerScroll: React.FC<PlayerScrollProps> = ({
   return (
     <ScrollArea>
       <div className="grid grid-flow-col grid-rows-1 gap-4 Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:grid-flow-row Expanded:h-[calc(100vh-100px)] w-max Expanded:w-[360px]">
-        {playerFilter(players).map((player) => (
-          <StateLayer key={player.id} className="bg-foreground">
-            <Dialog>
-              <DialogTrigger>
-                <PlayerCard player={player} isBp />
-              </DialogTrigger>
-              <DialogContent className="w-[300px] flex gap-2">
-                <Button onClick={() => setPlayerLeft(player)}>왼쪽교체</Button>
-                <Button onClick={() => setPlayerRight(player)}>
-                  오른쪽교체
-                </Button>
-              </DialogContent>
-            </Dialog>
-          </StateLayer>
-        ))}
+        {playerFilter(
+          players.map((player, idx) => ({
+            player: player,
+            node: (
+              <StateLayer key={player.id} className="bg-foreground">
+                <Dialog>
+                  <DialogTrigger className="relative">
+                    <div className="absolute top-0 left-0">{idx + 1}</div>
+                    <PlayerCard player={player} isBp />
+                  </DialogTrigger>
+                  <DialogContent className="w-[300px] flex gap-2">
+                    <Button onClick={() => setPlayerLeft(player)}>
+                      왼쪽교체
+                    </Button>
+                    <Button onClick={() => setPlayerRight(player)}>
+                      오른쪽교체
+                    </Button>
+                  </DialogContent>
+                </Dialog>
+              </StateLayer>
+            ),
+          }))
+        ).map((player) => player.node)}
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
@@ -141,16 +152,16 @@ export const PlayerScroll: React.FC<PlayerScrollProps> = ({
 };
 
 export const PlayerScrollFilter: React.FC<{
-  commandItems: { value: string; node: React.ReactNode }[];
+  selectItems: { value: string; node: React.ReactNode }[];
   type: "affiliation" | "feature";
-}> = ({ commandItems, type }) => {
+}> = ({ selectItems, type }) => {
   const { setCondition } = usePlayerScrollContext();
   const onSelctCallback = (value: string) =>
     setCondition((pre) => ({ ...pre, [type]: value.toUpperCase() }));
   return (
-    <Combobox
+    <Select
       defaultValue=""
-      commandItems={commandItems}
+      selectItems={selectItems}
       onSelctCallback={onSelctCallback}
     />
   );
@@ -158,8 +169,11 @@ export const PlayerScrollFilter: React.FC<{
 
 export const PlayerScrollProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
-  const [condition, setCondition] = useState<TCondition>({});
+  defaultCondition?: TCondition;
+}> = ({ children, defaultCondition }) => {
+  const [condition, setCondition] = useState<TCondition>(
+    defaultCondition || {}
+  );
   return (
     <PlayerScrollContext.Provider
       value={{
@@ -174,10 +188,26 @@ export const PlayerScrollProvider: React.FC<{
 
 export const PlayerScrollFilterReset: React.FC = () => {
   const { setCondition } = usePlayerScrollContext();
-  const onClickButton = () => setCondition(Object.assign({}));
+  const onClickButton = () => (
+    setCondition(Object.assign({})),
+    deleteCookies("condition"),
+    alert("초기화 완료")
+  );
   return (
     <Button onClick={onClickButton} className="w-[50px]">
       초기화
+    </Button>
+  );
+};
+
+export const PlayerScrollFilterFix: React.FC = () => {
+  const { condition } = usePlayerScrollContext();
+  const onClickButton = () => (
+    setCookies("condition", condition), alert("고정 완료")
+  );
+  return (
+    <Button onClick={onClickButton} className="w-[50px]">
+      고정
     </Button>
   );
 };
