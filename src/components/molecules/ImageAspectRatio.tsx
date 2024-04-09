@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ImageAspectRatioProps {
   width: number | string;
@@ -16,7 +16,7 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
   alt,
   className = "",
 }) => {
-  const [currentImgSrc, setCurrentImgSrc] = useState(imgSrc);
+  const [currentImgSrc, setCurrentImgSrc] = useState(`${imgSrc}`);
   const onErrorImage = () => {
     if (imgSrc.includes("player")) {
       setCurrentImgSrc(
@@ -24,6 +24,9 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
       );
     }
   };
+  useEffect(() => {
+    setCurrentImgSrc(imgSrc);
+  }, [imgSrc]);
   return (
     <div className="relative flex-shrink-0" style={{ width: width }}>
       <Image
