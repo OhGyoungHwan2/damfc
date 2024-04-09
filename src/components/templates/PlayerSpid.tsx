@@ -1,20 +1,14 @@
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
+import Compare from "../organisms/Compare";
 import { PlayerCompareProvider } from "@/context/store";
+import SelectStatus from "../organisms/SelectStatus";
 import {
-  ComparePlayerCard,
-  CompareRadar,
-} from "../organisms/simplayer/Compare";
-import { AddSelect } from "../organisms/simplayer/AddSelect";
-import {
-  PlayerScroll,
-  PlayerScrollFilter,
-  PlayerScrollFilterFix,
-  PlayerScrollFilterReset,
-  PlayerScrollProvider,
-} from "../organisms/simplayer/PlayerScroll";
-import Table from "../organisms/simplayer/Table";
+  PlayerScroll_Filter,
+  PlayerScroll_Provider,
+  PlayerScroll_Scroll,
+} from "../organisms/PlayerScroll";
 import { cookies } from "next/headers";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import CompareTable from "../organisms/CompareTable";
 
 const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   playerResponse,
@@ -25,76 +19,70 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   const condition = cookieStore.get("condition");
   const conditionObj = JSON.parse(condition?.value || "{}");
 
-  // let log = "";
-  // simPlayers.map((player, idx) => {
-  //   idx % 3 === 0 && (log += "\n");
-  //   log += `[${idx + 1}위${player.season}${player.name}], `;
-  // });
-  // console.log(log);
-
-  const createTeamSelectItems = (
-    values: number[],
-    type: "affiliation" | "feature"
-  ) => [
-    { value: "0", node: <>-</> },
-    ...values.map((value) => ({
-      value: `${teamcolors[type][value].name}`,
-      node: <>{teamcolors[type][value].name}</>,
-    })),
-  ];
-
   return (
-    <section className="flex flex-col Expanded:flex-row max-w-[905px] mx-auto w-full justify-between">
+    <section className="h-[calc(100vh-64px)] flex flex-col Expanded:flex-row">
       <PlayerCompareProvider
         defaultPlayerLeft={player}
         defaultPlayerRight={simPlayers[0]}
+        teamcolors={teamcolors}
       >
-        <section className="Expanded:w-[calc(100%-360px)] h-[calc(100vh-218px)] flex flex-col justify-between">
-          {/* ComparePlayerCard, AddSelect */}
-          <section className="h-[220px] grid grid-cols-6 items-center gap-0.5 Expanded:gap-2">
-            <div className="self-start col-span-2">
-              <ComparePlayerCard type="left" />
-            </div>
-            <div className="self-start col-span-2 Medium:row-span-2">
-              <CompareRadar />
-            </div>
-            <div className="self-start col-span-2">
-              <ComparePlayerCard type="right" />
-            </div>
-            <div className="self-end col-span-3 Medium:col-span-2">
-              <AddSelect type="left" teamcolors={teamcolors} />
-            </div>
-            <div className="self-end col-span-3 Medium:col-span-2">
-              <AddSelect type="right" teamcolors={teamcolors} />
+        <section className="Expanded:w-[calc(100vw-360px)] h-full Expanded:h-[calc(100vh-64px)] flex flex-col">
+          <section className="px-[16px]">
+            <Compare />
+          </section>
+          <section className="px-[16px]">
+            <div className="grid grid-cols-2">
+              <div className="grid grid-cols-6">
+                <div className="col-span-2">
+                  <SelectStatus type="enhance" dir="left" />
+                </div>
+                <div className="col-span-2">
+                  <SelectStatus type="adaptability" dir="left" />
+                </div>
+                <div className="col-span-2">
+                  <SelectStatus type="enhanceTeamcolor" dir="left" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="affiliation" dir="left" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="feature" dir="left" />
+                </div>
+              </div>
+              <div className="grid grid-cols-6">
+                <div className="col-span-2">
+                  <SelectStatus type="enhance" dir="right" />
+                </div>
+                <div className="col-span-2">
+                  <SelectStatus type="adaptability" dir="right" />
+                </div>
+                <div className="col-span-2">
+                  <SelectStatus type="enhanceTeamcolor" dir="right" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="affiliation" dir="right" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="feature" dir="right" />
+                </div>
+              </div>
             </div>
           </section>
-          {/* Table */}
-          <section className="h-[210px] Medium:h-[250px] Expanded:h-[400px] ">
-            <Table />
+          <section className="relative grow shrink">
+            <div className="absolute inset-0">
+              <CompareTable />
+            </div>
           </section>
         </section>
-        <PlayerScrollProvider defaultCondition={conditionObj}>
-          {/* PlayerScroll */}
-          <section className="h-[154px] Expanded:h-[calc(100vh-64px)] Expanded:w-[360px]">
-            <ScrollArea className="w-full">
-              <div className="flex items-center gap-1 w-max">
-                <PlayerScrollFilterReset />
-                <PlayerScrollFilterFix />
-                <PlayerScrollFilter
-                  selectItems={createTeamSelectItems(
-                    Object.keys(teamcolors.affiliation).map((key) =>
-                      parseInt(key)
-                    ),
-                    "affiliation"
-                  )}
-                  type="affiliation"
-                />
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-            <PlayerScroll players={simPlayers} teamcolors={teamcolors} />
-          </section>
-        </PlayerScrollProvider>
+        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[360px]">
+          <PlayerScroll_Provider
+            defaultCondition={conditionObj}
+            teamcolors={teamcolors}
+          >
+            <PlayerScroll_Filter />
+            <PlayerScroll_Scroll players={simPlayers} />
+          </PlayerScroll_Provider>
+        </section>
       </PlayerCompareProvider>
     </section>
   );

@@ -10,6 +10,11 @@
 .auto > .swiper-wrapper > .swiper-slide {
   width: auto !important;
 }
+
+#ScrollAreaWrapRow > div > div {
+  @apply flex h-full !important;
+}
+
 @tailwind utilities;
 
 @layer base {

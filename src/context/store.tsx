@@ -12,6 +12,7 @@ type PlayerCompareType = {
   setLeftAddStatus: (value: TSelectAddStatus) => void;
   rightAddStatus: TSelectAddStatus;
   setRightAddStatus: (value: TSelectAddStatus) => void;
+  teamcolors: TGETPlayer["teamcolors"];
 };
 
 const PlayerCompareContext = createContext<PlayerCompareType>({
@@ -23,13 +24,15 @@ const PlayerCompareContext = createContext<PlayerCompareType>({
   setLeftAddStatus: () => {},
   rightAddStatus: {},
   setRightAddStatus: () => {},
+  teamcolors: {} as TGETPlayer["teamcolors"],
 });
 
 export const PlayerCompareProvider: React.FC<{
   children: React.ReactNode;
   defaultPlayerLeft: TGETPlayer["player"];
   defaultPlayerRight: TGETPlayer["player"];
-}> = ({ children, defaultPlayerLeft, defaultPlayerRight }) => {
+  teamcolors: TGETPlayer["teamcolors"];
+}> = ({ children, defaultPlayerLeft, defaultPlayerRight, teamcolors }) => {
   const [playerLeft, setPlayerLeft] =
     useState<TGETPlayer["player"]>(defaultPlayerLeft);
   const [playerRight, setPlayerRight] =
@@ -53,6 +56,7 @@ export const PlayerCompareProvider: React.FC<{
         setLeftAddStatus,
         rightAddStatus,
         setRightAddStatus,
+        teamcolors,
       }}
     >
       {children}

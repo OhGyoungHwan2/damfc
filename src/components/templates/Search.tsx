@@ -8,8 +8,8 @@ const Search: React.FC<{
 }> = ({ searchResponse }) => {
   const { players } = searchResponse;
   return (
-    <main className="max-w-[1400px] p-4 small:p-6 medium:p-8 mx-auto flex flex-col gap-8 justify-center items-center">
-      <section className="relative flex flex-col w-full gap-4 p-4 border rounded-md border-border small:p-6 medium:p-8">
+    <section className="px-[16px] Expanded:px-[62px] Large:px-[106px] mx-auto flex flex-col gap-8 justify-center items-center">
+      <section className="relative flex flex-col w-full gap-4">
         <div>
           <h3>검색 결과</h3>
         </div>
@@ -19,16 +19,16 @@ const Search: React.FC<{
               href={`/player/${player.id}`}
               key={`ThumbnailInfo${player.id}`}
               target="_blank"
-              className="relative w-[200px]"
+              className="relative"
             >
               <StateLayer className="bg-foreground">
-                <PlayerCard player={player} />
+                <PlayerCard player={player} isBp />
               </StateLayer>
             </Link>
           ))}
         </div>
       </section>
-    </main>
+    </section>
   );
 };
 

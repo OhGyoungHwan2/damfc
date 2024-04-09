@@ -7,7 +7,7 @@ import { point2color } from "@/lib/cssfuntion";
 
 const AllStatus = { ...status, ...statusGK };
 
-const Table: React.FC = () => {
+const CompareTable: React.FC = () => {
   const { playerLeft, playerRight, leftAddStatus, rightAddStatus } =
     usePlayerCompareContext();
 
@@ -24,8 +24,8 @@ const Table: React.FC = () => {
   };
 
   return (
-    <ScrollArea className="size-full">
-      <div className="flex flex-col flex-wrap w-max h-[210px] Medium:h-[250px] Expanded:h-[400px] mx-auto">
+    <ScrollArea id="ScrollAreaWrapRow" className="size-full">
+      <div className="flex flex-col flex-wrap justify-start h-full gap-0 w-max">
         {statusOrder.map((statusKey) => {
           const leftCell =
             playerLeft[statusKey] + addStatus2point(leftAddStatus, statusKey);
@@ -35,7 +35,7 @@ const Table: React.FC = () => {
           return (
             <div
               key={statusKey}
-              className="grid justify-center grid-cols-3 gap-1 text-sm"
+              className="grid justify-center grid-cols-4 gap-1 text-sm w-[230px]"
             >
               <div className="col-span-1 text-right">
                 <span className="text-primary">
@@ -43,7 +43,7 @@ const Table: React.FC = () => {
                 </span>
                 <span className={point2color(leftCell)}>{leftCell}</span>
               </div>
-              <div className="col-span-1 text-center">
+              <div className="col-span-2 text-center">
                 {AllStatus[statusKey]}
               </div>
               <div className="col-span-1 text-left">
@@ -61,4 +61,4 @@ const Table: React.FC = () => {
   );
 };
 
-export default Table;
+export default CompareTable;

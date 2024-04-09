@@ -1,7 +1,6 @@
 "use client";
-
 import { RadarSliceTooltipProps, ResponsiveRadar } from "@nivo/radar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Radar1To1Props {
   target1: Record<string, number>;
@@ -13,28 +12,6 @@ interface Radar1To1Props {
   target2AddPoint?: Record<string, number>;
 }
 
-const adjustTarget = ({
-  target1,
-  target2,
-  target1Name,
-  target2Name,
-  viewKeys,
-  target1AddPoint,
-  target2AddPoint,
-}: Radar1To1Props) => {
-  return Object.keys(viewKeys).map((key) => ({
-    key,
-    [target1Name]:
-      (target1[key] ?? 0) +
-      (target1AddPoint?.[key] ?? 0) +
-      (target1AddPoint?.["all"] ?? 0),
-    [target2Name]:
-      (target2[key] ?? 0) +
-      (target2AddPoint?.[key] ?? 0) +
-      (target2AddPoint?.["all"] ?? 0),
-  }));
-};
-
 const Radar1To1: React.FC<Radar1To1Props> = ({
   target1,
   target2,
@@ -45,27 +22,30 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
   target2AddPoint,
 }) => {
   // 데이터
+  const viewKeysKey = Object.keys(viewKeys);
   const [tooltipItems, setTooltipItems] = useState({
-    index: "sprintspeed",
-    value1: target1["sprintspeed"],
-    value2: target2["sprintspeed"],
+    index: viewKeysKey[0],
+    value1: target1[viewKeysKey[0]],
+    value2: target2[viewKeysKey[0]],
   });
 
   // 계산
-  const data = adjustTarget({
-    target1,
-    target2,
-    target1Name,
-    target2Name,
-    viewKeys,
-    target1AddPoint,
-    target2AddPoint,
-  });
+  const data = viewKeysKey.map((key) => ({
+    key,
+    [target1Name]:
+      (target1[key] ?? 0) +
+      (target1AddPoint?.[key] ?? 0) +
+      (target1AddPoint?.["all"] ?? 0),
+    [target2Name]:
+      (target2[key] ?? 0) +
+      (target2AddPoint?.[key] ?? 0) +
+      (target2AddPoint?.["all"] ?? 0),
+  }));
 
   // 액션
   const handleSliceTooltip = (item: RadarSliceTooltipProps) => {
-    const leftData = item.data[0];
-    const rightData = item.data[1];
+    const leftData = item.data[1];
+    const rightData = item.data[0];
     setTooltipItems((pre) => ({
       ...pre,
       index: `${item.index}`,
@@ -74,12 +54,20 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
     }));
   };
 
+  useEffect(() => {
+    setTooltipItems({
+      index: viewKeysKey[0],
+      value1: target1[viewKeysKey[0]],
+      value2: target2[viewKeysKey[0]],
+    });
+  }, [target1, target2]);
+
   return (
-    <div className="py-2 size-full">
-      <div className="h-[110px] Medium:h-[186px] aspect-square mx-auto">
+    <>
+      <div className="aspect-square">
         <ResponsiveRadar
           data={data}
-          keys={[target1Name, target2Name]}
+          keys={[target2Name, target1Name]}
           indexBy={"key"}
           margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
           valueFormat={">-.0f"}
@@ -93,31 +81,12 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
           colors={["#227440", "#ffa800"]}
         />
       </div>
-      <RadarToolTip
-        value1={tooltipItems.value1}
-        value2={tooltipItems.value2}
-        index={viewKeys[tooltipItems.index]}
-      />
-    </div>
-  );
-};
-
-type RadarToolTipProps = {
-  value1: number;
-  value2: number;
-  index: string;
-};
-const RadarToolTip: React.FC<RadarToolTipProps> = ({
-  value1,
-  value2,
-  index,
-}) => {
-  return (
-    <div className="grid grid-cols-5 pt-1 text-center text-nowrap">
-      <small className="text-[#227440]">{value1}</small>
-      <small className="col-span-3">{index}</small>
-      <small className="text-[#ffa800]">{value2}</small>
-    </div>
+      <div className="grid grid-cols-5 pt-1 text-center text-nowrap">
+        <small className="text-[#227440]">{tooltipItems.value1}</small>
+        <small className="col-span-3">{viewKeys[tooltipItems.index]}</small>
+        <small className="text-[#ffa800]">{tooltipItems.value2}</small>
+      </div>
+    </>
   );
 };
 

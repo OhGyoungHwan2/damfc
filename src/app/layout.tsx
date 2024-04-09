@@ -3,7 +3,6 @@ import "./globals.css";
 import "lazysizes";
 import TopAppBar from "../components/organisms/TopAppBar";
 import { ThemeProvider } from "@/lib/provider/theme-provider";
-import Footer from "@/components/organisms/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,10 +24,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TopAppBar />
-          <main className="w-full max-w-[1478px] min-h-[calc(100vh-64px)] flex flex-col gap-[16px] Expanded:gap-[24px] Large:gap-[48px] ExtraLarge:gap-[64px]">
+          <main className="w-full max-w-[1478px] mx-auto min-h-[calc(100vh-64px)] flex flex-col gap-[16px] Expanded:gap-[24px] Large:gap-[48px] ExtraLarge:gap-[64px]">
             {children}
           </main>
-          <Footer />
         </ThemeProvider>
       </body>
     </html>
