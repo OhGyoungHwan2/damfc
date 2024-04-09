@@ -15,7 +15,7 @@ import {
   enhance,
   enhanceTeamcolor,
 } from "@/lib/const";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type ability = "ability1" | "ability2" | "ability3" | "ability4";
@@ -60,6 +60,10 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
       return 0;
     }
   };
+
+  useEffect(() => {
+    setAddStatus({});
+  }, [player]);
 
   switch (type) {
     case "adaptability":
@@ -189,14 +193,22 @@ const Select: React.FC<{
   className?: string;
   onSelctCallback: (value: string) => void;
 }> = ({ selectItems, className, isNoneSelect, onSelctCallback }) => {
-  const onSelectCallbackMobile = (e: ChangeEvent<HTMLSelectElement>) =>
-    onSelctCallback(e.target.value);
+  const [value, setValue] = useState(isNoneSelect ? "-" : selectItems[0].value);
+
+  const onSelectCallbackWeb = (value: string) => (
+    onSelctCallback(value), setValue(value)
+  );
+  const onSelectCallbackMobile = (e: ChangeEvent<HTMLSelectElement>) => (
+    onSelctCallback(e.target.value), setValue(e.target.value)
+  );
+
+  useEffect(() => {
+    setValue(isNoneSelect ? "-" : selectItems[0].value);
+  }, [selectItems]);
+
   return (
     <div className={className}>
-      <SelectContainer
-        defaultValue={isNoneSelect ? "" : selectItems[0].value}
-        onValueChange={onSelctCallback}
-      >
+      <SelectContainer value={value} onValueChange={onSelectCallbackWeb}>
         <SelectTrigger className={"w-full hidden Medium:flex"}>
           <SelectValue />
         </SelectTrigger>
@@ -212,7 +224,7 @@ const Select: React.FC<{
         </SelectContent>
       </SelectContainer>
       <select
-        defaultValue={isNoneSelect ? "-" : selectItems[0].value}
+        value={value}
         onChange={onSelectCallbackMobile}
         className={cn(CLASSNAME_SELECT, "flex Medium:hidden")}
         name="statusSelect"

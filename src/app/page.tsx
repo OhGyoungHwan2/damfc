@@ -1,6 +1,13 @@
 import Home from "../components/templates/Home";
 import { TGETRanker } from "./api/ranker/route";
 import { TGETRecommend } from "./api/recommend/route";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "DamFC",
+  description:
+    "FC온라인 최고의 선수찾기는 DamFC! 유사도 분석을 통한 최고의 선수 및 스쿼드를 확인해보세요",
+};
 
 async function getRecommend() {
   const res = await fetch(`${process.env.BASE_URL}/api/recommend`, {

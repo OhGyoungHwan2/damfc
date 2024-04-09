@@ -26,7 +26,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
         defaultPlayerRight={simPlayers[0]}
         teamcolors={teamcolors}
       >
-        <section className="Expanded:w-[calc(100vw-360px)] h-full Expanded:h-[calc(100vh-64px)] flex flex-col">
+        <section className="Expanded:w-[calc(100vw-360px)] h-full Expanded:h-[calc(100dvh-64px)] flex flex-col">
           <section className="px-[16px]">
             <Compare />
           </section>
