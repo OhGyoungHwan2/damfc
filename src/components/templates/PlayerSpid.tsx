@@ -20,13 +20,13 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
   const conditionObj = JSON.parse(condition?.value || "{}");
 
   return (
-    <section className="h-[calc(100vh-64px)] flex flex-col Expanded:flex-row">
+    <section className="h-[calc(100dvh-64px)] flex flex-col Expanded:flex-row">
       <PlayerCompareProvider
         defaultPlayerLeft={player}
         defaultPlayerRight={simPlayers[0]}
         teamcolors={teamcolors}
       >
-        <section className="Expanded:w-[calc(100vw-360px)] h-full Expanded:h-[calc(100dvh-64px)] flex flex-col">
+        <section className="Expanded:w-[calc(100vw-306px)] h-full Expanded:h-[calc(100dvh-64px)] flex flex-col">
           <section className="px-[16px]">
             <Compare />
           </section>
@@ -74,7 +74,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             </div>
           </section>
         </section>
-        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[360px]">
+        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[306px]">
           <PlayerScroll_Provider
             defaultCondition={conditionObj}
             teamcolors={teamcolors}

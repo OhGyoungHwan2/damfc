@@ -152,7 +152,7 @@ export const enhanceTeamcolor = {
   "은빛 물결 LV.1": { all: 1 },
   "은빛 물결 LV.2": { all: 2 },
   "금빛 물결 LV.1": { all: 2 },
-  "금빛 물결 LV.2": { all: 3 },
+  "금빛 물결 LV.2": { all: 4 },
 };
 
 export const traitKeys = [

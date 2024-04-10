@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SquadMaker from "./SquadMaker";
 
 const TopAppBar: React.FC = () => {
   // 데이터
@@ -37,6 +38,7 @@ const TopAppBar: React.FC = () => {
           </Link>
         </div>
         <div className="w-full max-w-[1478px] flex items-center justify-end gap-2 shrink">
+          <SquadMaker />
           <search className="flex items-center w-full max-w-xs space-x-2">
             <Input
               id="TopAppBarInput"

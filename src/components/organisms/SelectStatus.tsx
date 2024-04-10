@@ -17,6 +17,7 @@ import {
 } from "@/lib/const";
 import { ChangeEvent, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { TGETPlayer } from "@/app/api/player/[spid]/route";
 
 type ability = "ability1" | "ability2" | "ability3" | "ability4";
 type abilityStatus =
@@ -79,6 +80,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
             value: key,
             node: <div key={key}>{key}</div>,
           }))}
+          player={player}
         />
       );
     case "enhance":
@@ -94,6 +96,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
             value: key,
             node: <div key={key}>{key}</div>,
           }))}
+          player={player}
         />
       );
     case "enhanceTeamcolor":
@@ -116,6 +119,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
               node: <div key={key}>{key}</div>,
             }))
             .slice(0, getEnhanceSlice())}
+          player={player}
         />
       );
     case "affiliation":
@@ -147,6 +151,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
             node: <div key={key}>{teamcolors.affiliation[key].name}</div>,
             text: teamcolors.affiliation[key].name,
           }))}
+          player={player}
         />
       );
     case "feature":
@@ -178,6 +183,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
             node: <div key={key}>{teamcolors.feature[key].name}</div>,
             text: teamcolors.feature[key].name,
           }))}
+          player={player}
         />
       );
   }
@@ -192,7 +198,8 @@ const Select: React.FC<{
   isNoneSelect?: boolean;
   className?: string;
   onSelctCallback: (value: string) => void;
-}> = ({ selectItems, className, isNoneSelect, onSelctCallback }) => {
+  player: TGETPlayer["player"];
+}> = ({ selectItems, className, isNoneSelect, onSelctCallback, player }) => {
   const [value, setValue] = useState(isNoneSelect ? "-" : selectItems[0].value);
 
   const onSelectCallbackWeb = (value: string) => (
@@ -204,7 +211,7 @@ const Select: React.FC<{
 
   useEffect(() => {
     setValue(isNoneSelect ? "-" : selectItems[0].value);
-  }, [selectItems]);
+  }, [player]);
 
   return (
     <div className={className}>

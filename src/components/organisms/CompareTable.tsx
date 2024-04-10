@@ -35,7 +35,7 @@ const CompareTable: React.FC = () => {
           return (
             <div
               key={statusKey}
-              className="grid justify-center grid-cols-4 gap-1 text-sm w-[230px]"
+              className="grid justify-center grid-cols-4 gap-1 text-sm w-[230px] border-r-2 border-border"
             >
               <div className="col-span-1 text-right">
                 <span className="text-primary">

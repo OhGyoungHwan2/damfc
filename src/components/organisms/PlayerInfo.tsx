@@ -37,6 +37,9 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
     );
   };
 
+  const skillmovePoint =
+    player.skillmove + ((enhance || 0) > 4 ? 1 : (enhance || 0) > 7 ? 2 : 0);
+
   return (
     <div
       className={cn(
@@ -83,10 +86,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
       </div>
       {/* 개인기 */}
       <div className="text-[#fc0]">
-        {"".padEnd(
-          player.skillmove + (enhance || 0 > 4 ? 1 : enhance || 0 > 7 ? 2 : 0),
-          "★"
-        )}
+        {"".padEnd(skillmovePoint < 6 ? skillmovePoint : 6, "★")}
       </div>
       {/* BP */}
       {renderBpInfo()}

@@ -65,3 +65,109 @@ export const PlayerCompareProvider: React.FC<{
 };
 
 export const usePlayerCompareContext = () => useContext(PlayerCompareContext);
+
+type enhancePlayer = {
+  enhance: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  player?: TGETPlayer["player"];
+};
+
+export type SquadType = {
+  squadPlayers: {
+    "1": enhancePlayer;
+    "2": enhancePlayer;
+    "3": enhancePlayer;
+    "4": enhancePlayer;
+    "5": enhancePlayer;
+    "6": enhancePlayer;
+    "7": enhancePlayer;
+    "8": enhancePlayer;
+    "9": enhancePlayer;
+    "10": enhancePlayer;
+    GK: enhancePlayer;
+  };
+  onChangeSquadPlayer: (
+    player: TGETPlayer["player"],
+    idx: keyof SquadType["squadPlayers"]
+  ) => void;
+  onChangeEnhance: (
+    idx: keyof SquadType["squadPlayers"],
+    enhance: enhancePlayer["enhance"]
+  ) => void;
+  onDeletePlayer: (idx: keyof SquadType["squadPlayers"]) => void;
+};
+
+const SquadContext = createContext<SquadType>({
+  squadPlayers: {
+    "1": { enhance: 1 },
+    "2": { enhance: 1 },
+    "3": { enhance: 1 },
+    "4": { enhance: 1 },
+    "5": { enhance: 1 },
+    "6": { enhance: 1 },
+    "7": { enhance: 1 },
+    "8": { enhance: 1 },
+    "9": { enhance: 1 },
+    "10": { enhance: 1 },
+    GK: { enhance: 1 },
+  } as SquadType["squadPlayers"],
+  onChangeSquadPlayer: () => {},
+  onChangeEnhance: () => {},
+  onDeletePlayer: () => {},
+});
+
+export const SquadProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
+  const [squadPlayers, setSquadPlayers] = useState<SquadType["squadPlayers"]>({
+    "1": { enhance: 1 },
+    "2": { enhance: 1 },
+    "3": { enhance: 1 },
+    "4": { enhance: 1 },
+    "5": { enhance: 1 },
+    "6": { enhance: 1 },
+    "7": { enhance: 1 },
+    "8": { enhance: 1 },
+    "9": { enhance: 1 },
+    "10": { enhance: 1 },
+    GK: { enhance: 1 },
+  } as SquadType["squadPlayers"]);
+
+  const onChangeSquadPlayer = (
+    player: TGETPlayer["player"],
+    idx: keyof SquadType["squadPlayers"]
+  ) =>
+    setSquadPlayers((pre) => ({
+      ...pre,
+      [idx]: { player: player, enhance: 1 },
+    }));
+
+  const onChangeEnhance = (
+    idx: keyof SquadType["squadPlayers"],
+    enhance: enhancePlayer["enhance"]
+  ) =>
+    setSquadPlayers((pre) => ({
+      ...pre,
+      [idx]: { ...pre[idx], enhance: enhance },
+    }));
+
+  const onDeletePlayer = (idx: keyof SquadType["squadPlayers"]) =>
+    setSquadPlayers((pre) => ({
+      ...pre,
+      [idx]: { enhance: 1 },
+    }));
+
+  return (
+    <SquadContext.Provider
+      value={{
+        squadPlayers,
+        onChangeSquadPlayer,
+        onChangeEnhance,
+        onDeletePlayer,
+      }}
+    >
+      {children}
+    </SquadContext.Provider>
+  );
+};
+
+export const useSquadContext = () => useContext(SquadContext);

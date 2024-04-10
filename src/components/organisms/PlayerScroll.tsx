@@ -21,12 +21,21 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import StateLayer from "@/components/atoms/StateLayer";
 import { Button } from "@/components/ui/button";
 import { status, statusGK } from "@/lib/const";
-import { usePlayerCompareContext } from "@/context/store";
+import { usePlayerCompareContext, useSquadContext } from "@/context/store";
 import { deleteCookies, setCookies } from "@/lib/actions";
 import PlayerCard from "./PlayerCard";
 import { cn } from "@/lib/utils";
@@ -92,7 +101,21 @@ export const PlayerScroll_Scroll: React.FC<{
 }> = ({ players }) => {
   // 데이터
   const { setPlayerLeft, setPlayerRight } = usePlayerCompareContext();
+  const { squadPlayers, onChangeSquadPlayer } = useSquadContext();
   const { condition } = usePlayerScrollContext();
+  const selectItems = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "GK",
+  ] as const;
   // 계산
   const renderPlayerCard = () =>
     players.map((player, idx) => {
@@ -109,29 +132,56 @@ export const PlayerScroll_Scroll: React.FC<{
       });
       return isRender ? (
         <StateLayer key={player.id} className="bg-foreground">
-          <ContextMenu>
-            <ContextMenuTrigger>
-              <PlayerCard player={player} isBp />
-              <div
-                className={cn(
-                  "absolute top-0 left-0 bg-secondary rounded-full size-[18px] text-center leading-none",
-                  idx + 1 === 1 && "bg-[#D5A11E]",
-                  idx + 1 === 2 && "bg-[#A3A3A3]",
-                  idx + 1 === 3 && "bg-[#CD7F32]"
-                )}
-              >
-                {idx + 1}
+          <Dialog>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>자리 선택</DialogTitle>
+                <DialogDescription>
+                  GK는 GK만 선택 가능합니다.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid grid-cols-4">
+                {selectItems.map((key) => (
+                  <DialogClose key={key} asChild>
+                    <Button
+                      onClick={() => onChangeSquadPlayer(player, key)}
+                      variant={
+                        squadPlayers[key].player ? "secondary" : "outline"
+                      }
+                    >
+                      {key}
+                    </Button>
+                  </DialogClose>
+                ))}
               </div>
-            </ContextMenuTrigger>
-            <ContextMenuContent>
-              <ContextMenuItem onClick={() => setPlayerRight(player)}>
-                오른쪽 교체
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => setPlayerLeft(player)}>
-                왼쪽 교체
-              </ContextMenuItem>
-            </ContextMenuContent>
-          </ContextMenu>
+            </DialogContent>
+            <ContextMenu>
+              <ContextMenuTrigger>
+                <PlayerCard player={player} isBp />
+                <div
+                  className={cn(
+                    "absolute top-0 left-0 bg-secondary rounded-full size-[18px] text-center leading-none",
+                    idx + 1 === 1 && "bg-[#D5A11E]",
+                    idx + 1 === 2 && "bg-[#A3A3A3]",
+                    idx + 1 === 3 && "bg-[#CD7F32]"
+                  )}
+                >
+                  {idx + 1}
+                </div>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem onClick={() => setPlayerRight(player)}>
+                  오른쪽 교체
+                </ContextMenuItem>
+                <ContextMenuItem onClick={() => setPlayerLeft(player)}>
+                  왼쪽 교체
+                </ContextMenuItem>
+                <ContextMenuItem>
+                  <DialogTrigger>스쿼드 추가</DialogTrigger>
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
+          </Dialog>
         </StateLayer>
       ) : null;
     });
