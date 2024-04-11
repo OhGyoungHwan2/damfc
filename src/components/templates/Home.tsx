@@ -12,6 +12,13 @@ import StateLayer from "../atoms/StateLayer";
 import PlayerCard from "../organisms/PlayerCard";
 import Stadium from "../organisms/Stadium";
 import PlayerPosition from "../organisms/PlayerPosition";
+import { SquadAddPlayer } from "../organisms/SquadMaker";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 
 const Home: React.FC<{
   responseRecommend: TGETRecommend;
@@ -78,7 +85,18 @@ const Home: React.FC<{
                 target="_blank"
               >
                 <StateLayer className="bg-foreground">
-                  <PlayerCard player={recommend.player} isBp />
+                  <ContextMenu>
+                    <ContextMenuTrigger>
+                      <PlayerCard player={recommend.player} isBp />
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      <ContextMenuItem>
+                        <SquadAddPlayer player={recommend.player}>
+                          스쿼드 추가
+                        </SquadAddPlayer>
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 </StateLayer>
               </Link>
             ))}

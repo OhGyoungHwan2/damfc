@@ -2,6 +2,13 @@ import { IGETSearch } from "@/app/api/search/route";
 import Link from "next/link";
 import StateLayer from "../atoms/StateLayer";
 import PlayerCard from "../organisms/PlayerCard";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { SquadAddPlayer } from "../organisms/SquadMaker";
 
 const Search: React.FC<{
   searchResponse: IGETSearch;
@@ -22,7 +29,18 @@ const Search: React.FC<{
               className="relative"
             >
               <StateLayer className="bg-foreground">
-                <PlayerCard player={player} isBp />
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <PlayerCard player={player} isBp />
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem>
+                      <SquadAddPlayer player={player}>
+                        스쿼드 추가
+                      </SquadAddPlayer>
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
               </StateLayer>
             </Link>
           ))}

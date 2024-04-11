@@ -1,7 +1,9 @@
 "use client";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
+import { TRecommend } from "@/app/api/recommend/route";
+import { setCookies } from "@/lib/actions";
 import { TSelectAddStatus } from "@/lib/const";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type PlayerCompareType = {
   playerLeft: TGETPlayer["player"];
@@ -68,101 +70,67 @@ export const usePlayerCompareContext = () => useContext(PlayerCompareContext);
 
 type enhancePlayer = {
   enhance: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-  player?: TGETPlayer["player"];
+  player: TGETPlayer["player"] | TRecommend["player"];
 };
 
 export type SquadType = {
-  squadPlayers: {
-    "1": enhancePlayer;
-    "2": enhancePlayer;
-    "3": enhancePlayer;
-    "4": enhancePlayer;
-    "5": enhancePlayer;
-    "6": enhancePlayer;
-    "7": enhancePlayer;
-    "8": enhancePlayer;
-    "9": enhancePlayer;
-    "10": enhancePlayer;
-    GK: enhancePlayer;
-  };
-  onChangeSquadPlayer: (
-    player: TGETPlayer["player"],
-    idx: keyof SquadType["squadPlayers"]
+  squadPlayers: enhancePlayer[];
+  onAddSquadPlayer: (
+    player: TGETPlayer["player"] | TRecommend["player"]
   ) => void;
-  onChangeEnhance: (
-    idx: keyof SquadType["squadPlayers"],
-    enhance: enhancePlayer["enhance"]
-  ) => void;
-  onDeletePlayer: (idx: keyof SquadType["squadPlayers"]) => void;
+  onChangeEnhance: (idx: number, enhance: enhancePlayer["enhance"]) => void;
+  onDeletePlayer: (idx: number) => void;
+  onUpdateSquadPlayers: (value: SquadType["squadPlayers"]) => void;
 };
 
 const SquadContext = createContext<SquadType>({
-  squadPlayers: {
-    "1": { enhance: 1 },
-    "2": { enhance: 1 },
-    "3": { enhance: 1 },
-    "4": { enhance: 1 },
-    "5": { enhance: 1 },
-    "6": { enhance: 1 },
-    "7": { enhance: 1 },
-    "8": { enhance: 1 },
-    "9": { enhance: 1 },
-    "10": { enhance: 1 },
-    GK: { enhance: 1 },
-  } as SquadType["squadPlayers"],
-  onChangeSquadPlayer: () => {},
+  squadPlayers: [] as SquadType["squadPlayers"],
+  onAddSquadPlayer: () => {},
   onChangeEnhance: () => {},
   onDeletePlayer: () => {},
+  onUpdateSquadPlayers: () => {},
 });
 
 export const SquadProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
-  const [squadPlayers, setSquadPlayers] = useState<SquadType["squadPlayers"]>({
-    "1": { enhance: 1 },
-    "2": { enhance: 1 },
-    "3": { enhance: 1 },
-    "4": { enhance: 1 },
-    "5": { enhance: 1 },
-    "6": { enhance: 1 },
-    "7": { enhance: 1 },
-    "8": { enhance: 1 },
-    "9": { enhance: 1 },
-    "10": { enhance: 1 },
-    GK: { enhance: 1 },
-  } as SquadType["squadPlayers"]);
+  defaultSquadPlayers?: enhancePlayer[];
+}> = ({ children, defaultSquadPlayers }) => {
+  const [squadPlayers, setSquadPlayers] = useState<SquadType["squadPlayers"]>(
+    defaultSquadPlayers || ([] as SquadType["squadPlayers"])
+  );
 
-  const onChangeSquadPlayer = (
-    player: TGETPlayer["player"],
-    idx: keyof SquadType["squadPlayers"]
-  ) =>
-    setSquadPlayers((pre) => ({
-      ...pre,
-      [idx]: { player: player, enhance: 1 },
-    }));
+  const onAddSquadPlayer = (
+    player: TGETPlayer["player"] | TRecommend["player"]
+  ) => setSquadPlayers((pre) => [...pre, { player: player, enhance: 1 }]);
 
-  const onChangeEnhance = (
-    idx: keyof SquadType["squadPlayers"],
-    enhance: enhancePlayer["enhance"]
-  ) =>
-    setSquadPlayers((pre) => ({
-      ...pre,
-      [idx]: { ...pre[idx], enhance: enhance },
-    }));
+  const onChangeEnhance = (idx: number, enhance: enhancePlayer["enhance"]) =>
+    setSquadPlayers((pre) => {
+      pre[idx].enhance = enhance;
+      return [...pre];
+    });
 
-  const onDeletePlayer = (idx: keyof SquadType["squadPlayers"]) =>
-    setSquadPlayers((pre) => ({
-      ...pre,
-      [idx]: { enhance: 1 },
-    }));
+  const onDeletePlayer = (idx: number) =>
+    setSquadPlayers((pre) => {
+      pre.splice(idx, 1);
+      return [...pre];
+    });
+
+  const onUpdateSquadPlayers = (
+    updateSquadPlayers: SquadType["squadPlayers"]
+  ) => setSquadPlayers(updateSquadPlayers);
+
+  useEffect(() => {
+    setCookies("squadPlayers", squadPlayers);
+  }, [squadPlayers]);
 
   return (
     <SquadContext.Provider
       value={{
         squadPlayers,
-        onChangeSquadPlayer,
+        onAddSquadPlayer,
         onChangeEnhance,
         onDeletePlayer,
+        onUpdateSquadPlayers,
       }}
     >
       {children}

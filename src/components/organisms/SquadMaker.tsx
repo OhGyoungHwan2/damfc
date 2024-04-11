@@ -3,6 +3,7 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -16,175 +17,196 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { TransparencyGridIcon } from "@radix-ui/react-icons";
+import { CookiesProvider, useCookies } from "react-cookie";
+
+import {
+  TransparencyGridIcon,
+  TrashIcon,
+  UpdateIcon,
+  ResetIcon,
+} from "@radix-ui/react-icons";
 
 import { ChangeEvent } from "react";
 import { Button } from "../ui/button";
-import { SquadType, useSquadContext } from "@/context/store";
+import { useSquadContext } from "@/context/store";
 import { cn } from "@/lib/utils";
 import { enhance } from "@/lib/const";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import PlayerInfo from "./PlayerInfo";
 import { bp2string } from "@/lib/cssfuntion";
 import ImageAspectRatio from "../molecules/ImageAspectRatio";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { TRecommend } from "@/app/api/recommend/route";
 
 const CLASSNAME_SELECT =
   "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1";
 
+type enhanceSelect = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
 const SquadMaker: React.FC = () => {
-  const { squadPlayers, onChangeEnhance, onDeletePlayer } = useSquadContext();
+  const {
+    squadPlayers,
+    onChangeEnhance,
+    onDeletePlayer,
+    onUpdateSquadPlayers,
+  } = useSquadContext();
+  const [cookies] = useCookies(["squadPlayers"]);
+
+  const allBP = squadPlayers.reduce((sum, { player, enhance }) => {
+    return (sum += player?.[`bp${enhance}`] || 0);
+  }, 0);
+
+  const allPay = squadPlayers.reduce((sum, { player }) => {
+    return (sum += player?.pay || 0);
+  }, 0);
+
+  const onClickUpdate = () => onUpdateSquadPlayers(cookies.squadPlayers || []);
+  const onClickReset = () => onUpdateSquadPlayers([]);
+
   return (
     <Sheet>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <SheetTrigger asChild>
-              <Button variant="outline">
-                <TransparencyGridIcon className="w-[20px] h-[20px]" />
-              </Button>
-            </SheetTrigger>
-          </TooltipTrigger>
-          <TooltipContent className="bg-background">
-            <small className="text-foreground">스쿼드 보기</small>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <SheetContent side="right">
-        <SheetHeader>
-          <SheetTitle>스쿼드 가격 체크</SheetTitle>
-          <SheetDescription>
-            스쿼드를 완성해 가격을 확인하세요.
-          </SheetDescription>
-        </SheetHeader>
-        <ScrollArea className="h-[50dvh]">
-          <div className="flex flex-col gap-1 h-max py-2 divide-y-2 divide-border">
-            {Object.entries(squadPlayers).map(([key, playerEnhance]) => (
-              <div className="relative flex justify-between py-1" key={key}>
-                <div className="flex">
-                  <div className="flex flex-col items-center">
-                    {playerEnhance.player && (
+      <CookiesProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <SheetTrigger asChild>
+                <Button variant="outline">
+                  <TransparencyGridIcon className="w-[20px] h-[20px]" />
+                </Button>
+              </SheetTrigger>
+            </TooltipTrigger>
+            <TooltipContent className="bg-background">
+              <small className="text-foreground">스쿼드 보기</small>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <SheetContent side="right">
+          <SheetHeader>
+            <SheetTitle>스쿼드 가격 체크</SheetTitle>
+            <SheetDescription>
+              스쿼드를 완성해 가격을 확인하세요.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="flex gap-1 w-full justify-end">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" onClick={() => onClickUpdate()}>
+                    <UpdateIcon className="size-[20px]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-background">
+                  <small className="text-foreground">최신화</small>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" onClick={() => onClickReset()}>
+                    <ResetIcon className="size-[20px]" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-background">
+                  <small className="text-foreground">비우기</small>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <ScrollArea className="h-[70dvh] pr-1">
+            <div className="flex flex-col h-max gap-2 divide-y-2 divide-border">
+              {squadPlayers.map(({ player, enhance: playerEnhance }, idx) =>
+                player ? (
+                  <div className="px-1 pt-2 pb-1 relative w-full" key={idx}>
+                    <div className="flex flex-1">
                       <ImageAspectRatio
                         width={64}
-                        imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${playerEnhance.player.imgId}.AVIF?raw=true`}
-                        alt={`${playerEnhance.player.season}${playerEnhance.player.name}이미지`}
+                        imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${player.imgId}.AVIF?raw=true`}
+                        alt={`${player.season}${player.name}이미지`}
                       />
-                    )}
-                    {playerEnhance.player && (
-                      <small>
-                        {bp2string(
-                          playerEnhance.player[`bp${playerEnhance.enhance}`]
-                        )}
-                        BP
-                      </small>
-                    )}
+                      <div className="flex flex-col justify-between">
+                        <div className="flex gap-1 items-center">
+                          <ImageAspectRatio
+                            width={20}
+                            imgSrc={`/season/${player.season}.png`}
+                            alt={`${player.season}이미지`}
+                          />
+                          <small>{player.name}</small>
+                        </div>
+                        <Select
+                          selectItems={Object.keys(enhance).map((value) => ({
+                            value: value,
+                            node: <div key={value}>{value}</div>,
+                          }))}
+                          onSelctCallback={(value) =>
+                            onChangeEnhance(
+                              idx,
+                              parseInt(value) as enhanceSelect
+                            )
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="absolute top-1 right-1">
+                      <Button
+                        variant="ghost"
+                        onClick={() => onDeletePlayer(idx)}
+                      >
+                        <TrashIcon className="size-[20px]" />
+                      </Button>
+                    </div>
+                    <div className="absolute bottom-1 right-1">
+                      <small>{`${bp2string(
+                        player?.[`bp${playerEnhance}`] || 0
+                      )} BP`}</small>
+                    </div>
+                    <div className="size-[16px] absolute left-0 top-0 rounded-full">
+                      {idx + 1}
+                    </div>
                   </div>
-                  {playerEnhance.player && (
-                    <PlayerInfo
-                      player={playerEnhance.player}
-                      enhance={playerEnhance.enhance}
-                    />
-                  )}
-                </div>
-                <div className="flex flex-col justify-between">
-                  <Select
-                    selectItems={Object.keys(enhance).map((value) => ({
-                      value: value,
-                      node: <div key={value}>{value}</div>,
-                    }))}
-                    onSelctCallback={(value) =>
-                      onChangeEnhance(
-                        key as keyof SquadType["squadPlayers"],
-                        parseInt(value) as
-                          | 1
-                          | 2
-                          | 3
-                          | 4
-                          | 5
-                          | 6
-                          | 7
-                          | 8
-                          | 9
-                          | 10
-                      )
-                    }
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={() =>
-                      onDeletePlayer(key as keyof SquadType["squadPlayers"])
-                    }
-                  >
-                    비우기
-                  </Button>
-                </div>
-                <div className="size-[16px] rounded-full absolute left-0 top-0">
-                  {key}
-                </div>
+                ) : (
+                  <></>
+                )
+              )}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+          <SheetFooter>
+            <div className="flex flex-col w-full">
+              <div className="w-full flex justify-between">
+                <span className="text-muted-foreground font-bold">총 급여</span>
+                <span
+                  className={
+                    allPay > 255 ? "text-destructive" : "text-foreground"
+                  }
+                >
+                  {`${allPay}/255`}
+                </span>
               </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </SheetContent>
+              <div className="w-full flex justify-between">
+                <span className="text-muted-foreground font-bold">총 가격</span>
+                <span>{`${bp2string(allBP)} BP`}</span>
+              </div>
+            </div>
+          </SheetFooter>
+        </SheetContent>
+      </CookiesProvider>
     </Sheet>
   );
 };
 
 export const SquadAddPlayer: React.FC<{
   children: React.ReactNode;
-  player: TGETPlayer["player"];
+  player: TGETPlayer["player"] | TRecommend["player"];
 }> = ({ children, player }) => {
-  const selectItems = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "GK",
-  ] as const;
-  const { squadPlayers, onChangeSquadPlayer } = useSquadContext();
-  const onClickCallback = (value: string) =>
-    onChangeSquadPlayer(player, value as keyof SquadType["squadPlayers"]);
-  return (
-    <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>자리 선택</DialogTitle>
-          <DialogDescription>GK는 GK만 선택 가능합니다.</DialogDescription>
-        </DialogHeader>
-        {selectItems.map((key) => (
-          <Button
-            onClick={() => onClickCallback(key)}
-            variant={squadPlayers[key].player ? "secondary" : "outline"}
-            key={key}
-          >
-            {key}
-          </Button>
-        ))}
-      </DialogContent>
-    </Dialog>
-  );
+  const { onAddSquadPlayer } = useSquadContext();
+  const onClickCallback = () => onAddSquadPlayer(player);
+  return <div onClick={() => onClickCallback()}>{children}</div>;
 };
 
 const Select: React.FC<{

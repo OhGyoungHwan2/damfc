@@ -21,24 +21,16 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import StateLayer from "@/components/atoms/StateLayer";
 import { Button } from "@/components/ui/button";
-import { status, statusGK } from "@/lib/const";
-import { usePlayerCompareContext, useSquadContext } from "@/context/store";
+import { number2physical, status, statusGK } from "@/lib/const";
+import { usePlayerCompareContext } from "@/context/store";
 import { deleteCookies, setCookies } from "@/lib/actions";
 import PlayerCard from "./PlayerCard";
 import { cn } from "@/lib/utils";
+import { SquadAddPlayer } from "./SquadMaker";
 
 const CLASSNAME_SELECT =
   "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1";
@@ -101,60 +93,30 @@ export const PlayerScroll_Scroll: React.FC<{
 }> = ({ players }) => {
   // 데이터
   const { setPlayerLeft, setPlayerRight } = usePlayerCompareContext();
-  const { squadPlayers, onChangeSquadPlayer } = useSquadContext();
   const { condition } = usePlayerScrollContext();
-  const selectItems = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "GK",
-  ] as const;
   // 계산
-  const renderPlayerCard = () =>
-    players.map((player, idx) => {
-      const isRender = Object.entries(condition).every(([key, value]) => {
-        if (["affiliation", "feature"].includes(key)) {
-          const tempKey = key as "affiliation" | "feature";
-          const tempTeamId = value as string;
-          return (
-            tempTeamId &&
-            player.teamcolors[tempKey].includes(parseInt(tempTeamId))
-          );
-        }
-        return true;
-      });
-      return isRender ? (
-        <StateLayer key={player.id} className="bg-foreground">
-          <Dialog>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>자리 선택</DialogTitle>
-                <DialogDescription>
-                  GK는 GK만 선택 가능합니다.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid grid-cols-4">
-                {selectItems.map((key) => (
-                  <DialogClose key={key} asChild>
-                    <Button
-                      onClick={() => onChangeSquadPlayer(player, key)}
-                      variant={
-                        squadPlayers[key].player ? "secondary" : "outline"
-                      }
-                    >
-                      {key}
-                    </Button>
-                  </DialogClose>
-                ))}
-              </div>
-            </DialogContent>
+  const renderPlayerCard = () => {
+    let render = false;
+    return {
+      node: players.map((player, idx) => {
+        const isRender = Object.entries(condition).every(([key, value]) => {
+          if (["affiliation", "feature"].includes(key)) {
+            const tempKey = key as "affiliation" | "feature";
+            const tempTeamId = value as string;
+            return (
+              tempTeamId &&
+              player.teamcolors[tempKey].includes(parseInt(tempTeamId))
+            );
+          } else if (["mainfoot", "physical"].includes(key)) {
+            const tempKey = key as "mainfoot" | "physical";
+            const tempTeamId = value as string;
+            return tempTeamId && player[tempKey] == parseInt(tempTeamId);
+          }
+          return true;
+        });
+        render ||= isRender;
+        return isRender ? (
+          <StateLayer key={player.id} className="bg-foreground">
             <ContextMenu>
               <ContextMenuTrigger>
                 <PlayerCard player={player} isBp />
@@ -177,19 +139,27 @@ export const PlayerScroll_Scroll: React.FC<{
                   왼쪽 교체
                 </ContextMenuItem>
                 <ContextMenuItem>
-                  <DialogTrigger>스쿼드 추가</DialogTrigger>
+                  <SquadAddPlayer player={player}>스쿼드 추가</SquadAddPlayer>
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
-          </Dialog>
-        </StateLayer>
-      ) : null;
-    });
+          </StateLayer>
+        ) : null;
+      }),
+      isRender: render,
+    };
+  };
   // 액션
   return (
     <ScrollArea>
       <div className="grid grid-flow-col grid-rows-1 Medium:grid-rows-2 gap-4 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:grid-flow-row Expanded:h-[calc(100vh-100px)] w-max Expanded:w-[360px]">
-        {renderPlayerCard()}
+        {renderPlayerCard().isRender ? (
+          renderPlayerCard().node
+        ) : (
+          <div className="h-[110px] text-muted-foreground flex items-center">
+            결과가 없습니다...
+          </div>
+        )}
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
@@ -208,18 +178,34 @@ export const PlayerScroll_Filter: React.FC = () => {
       : setCondition((pre) => ({ ...pre, [type]: value.toUpperCase() }));
   };
 
-  const affiliationSelectItem = Object.entries(teamcolors.affiliation).map(
-    ([key, value]) => ({
+  const affiliationSelectItem = Object.entries(teamcolors.affiliation)
+    .map(([key, value]) => ({
       value: `${key}`,
       node: <div key={key}>{value.name}</div>,
       text: value.name,
-    })
-  );
-  const featureSelectItem = Object.entries(teamcolors.feature).map(
-    ([key, value]) => ({
+    }))
+    .sort((pre, next) =>
+      pre.text < next.text ? -1 : pre.text > next.text ? 1 : 0
+    );
+  const featureSelectItem = Object.entries(teamcolors.feature)
+    .map(([key, value]) => ({
       value: `${key}`,
       node: <div key={key}>{value.name}</div>,
       text: value.name,
+    }))
+    .sort((pre, next) =>
+      pre.text < next.text ? -1 : pre.text > next.text ? 1 : 0
+    );
+  const mainfootSelectItem = ["왼발", "오른발"].map((value) => ({
+    value: value === "왼발" ? `1` : `-1`,
+    node: <div key={value}>{value}</div>,
+    text: value,
+  }));
+  const physicalSelectItem = Object.entries(number2physical).map(
+    ([idx, name]) => ({
+      value: `${idx}`,
+      node: <div key={idx}>{name}</div>,
+      text: name,
     })
   );
   // 계산
@@ -227,8 +213,21 @@ export const PlayerScroll_Filter: React.FC = () => {
   return (
     <ScrollArea>
       <div className="flex gap-1 w-max">
-        <Button onClick={() => setCookies("condition", condition)}>고정</Button>
-        <Button onClick={() => deleteCookies("condition")}>초기화</Button>
+        <Button
+          onClick={() => (
+            setCookies("condition", condition), alert("고정 완료")
+          )}
+        >
+          고정
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={() => (
+            deleteCookies("condition"), setCondition({}), alert("초기화 완료")
+          )}
+        >
+          초기화
+        </Button>
         <Select
           label="소속"
           selectItems={affiliationSelectItem}
@@ -242,6 +241,22 @@ export const PlayerScroll_Filter: React.FC = () => {
           selectItems={featureSelectItem}
           onSelctCallback={(value: string) => onSelctCallback(value, "feature")}
           className="w-[150px]"
+        />
+        <Select
+          label="주발"
+          selectItems={mainfootSelectItem}
+          onSelctCallback={(value: string) =>
+            onSelctCallback(value, "mainfoot")
+          }
+          className="w-[100px]"
+        />
+        <Select
+          label="체형"
+          selectItems={physicalSelectItem}
+          onSelctCallback={(value: string) =>
+            onSelctCallback(value, "physical")
+          }
+          className="w-[100px]"
         />
       </div>
       <ScrollBar orientation="horizontal" />

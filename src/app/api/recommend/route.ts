@@ -10,27 +10,7 @@ const option = {
     rank: true,
     subcategory: true,
     subcategoryOrder: true,
-    player: {
-      select: {
-        id: true,
-        name: true,
-        season: true,
-        imgId: true,
-        ovr: true,
-        position: true,
-        pay: true,
-        mainfoot: true,
-        weakfoot: true,
-        physical: true,
-        weight: true,
-        height: true,
-        skillmove: true,
-        bp1: true,
-        bp3: true,
-        bp5: true,
-        bp8: true,
-      },
-    },
+    player: true,
   },
 };
 
