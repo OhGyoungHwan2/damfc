@@ -78,7 +78,7 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
             handleSliceTooltip({ ...item });
             return undefined;
           }}
-          colors={["#227440", "#ffa800"]}
+          colors={["#ffa800", "#227440"]}
         />
       </div>
       <div className="grid grid-cols-5 pt-1 text-center text-nowrap">

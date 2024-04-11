@@ -1,7 +1,6 @@
 "use client";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import { TRecommend } from "@/app/api/recommend/route";
-import { setCookies } from "@/lib/actions";
 import { TSelectAddStatus } from "@/lib/const";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -80,7 +79,7 @@ export type SquadType = {
   ) => void;
   onChangeEnhance: (idx: number, enhance: enhancePlayer["enhance"]) => void;
   onDeletePlayer: (idx: number) => void;
-  onUpdateSquadPlayers: (value: SquadType["squadPlayers"]) => void;
+  onUpdateSquadPlayers: () => void;
 };
 
 const SquadContext = createContext<SquadType>({
@@ -93,10 +92,9 @@ const SquadContext = createContext<SquadType>({
 
 export const SquadProvider: React.FC<{
   children: React.ReactNode;
-  defaultSquadPlayers?: enhancePlayer[];
-}> = ({ children, defaultSquadPlayers }) => {
+}> = ({ children }) => {
   const [squadPlayers, setSquadPlayers] = useState<SquadType["squadPlayers"]>(
-    defaultSquadPlayers || ([] as SquadType["squadPlayers"])
+    [] as SquadType["squadPlayers"]
   );
 
   const onAddSquadPlayer = (
@@ -115,13 +113,22 @@ export const SquadProvider: React.FC<{
       return [...pre];
     });
 
-  const onUpdateSquadPlayers = (
-    updateSquadPlayers: SquadType["squadPlayers"]
-  ) => setSquadPlayers(updateSquadPlayers);
+  const onUpdateSquadPlayers = () => {
+    const myStorageSquadPlayers = window.localStorage.getItem("squadPlayers");
+    const tempSquadPlayers = JSON.parse(
+      myStorageSquadPlayers || "[]"
+    ) as SquadType["squadPlayers"];
+    tempSquadPlayers.length > 0 && setSquadPlayers([...tempSquadPlayers]);
+  };
 
   useEffect(() => {
-    setCookies("squadPlayers", squadPlayers);
-  }, [squadPlayers]);
+    onUpdateSquadPlayers();
+  }, []);
+
+  useEffect(() => {
+    squadPlayers &&
+      window.localStorage.setItem("squadPlayers", JSON.stringify(squadPlayers));
+  }, [JSON.stringify(squadPlayers)]);
 
   return (
     <SquadContext.Provider

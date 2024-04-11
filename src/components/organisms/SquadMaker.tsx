@@ -23,8 +23,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { CookiesProvider, useCookies } from "react-cookie";
-
 import {
   TransparencyGridIcon,
   TrashIcon,
@@ -55,7 +53,6 @@ const SquadMaker: React.FC = () => {
     onDeletePlayer,
     onUpdateSquadPlayers,
   } = useSquadContext();
-  const [cookies] = useCookies(["squadPlayers"]);
 
   const allBP = squadPlayers.reduce((sum, { player, enhance }) => {
     return (sum += player?.[`bp${enhance}`] || 0);
@@ -65,137 +62,132 @@ const SquadMaker: React.FC = () => {
     return (sum += player?.pay || 0);
   }, 0);
 
-  const onClickUpdate = () => onUpdateSquadPlayers(cookies.squadPlayers || []);
-  const onClickReset = () => onUpdateSquadPlayers([]);
+  const onClickUpdate = () => {
+    onUpdateSquadPlayers();
+  };
+  const onClickReset = () => onUpdateSquadPlayers();
 
   return (
     <Sheet>
-      <CookiesProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <SheetTrigger asChild>
-                <Button variant="outline">
-                  <TransparencyGridIcon className="w-[20px] h-[20px]" />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SheetTrigger asChild>
+              <Button variant="outline" onClick={onClickUpdate}>
+                <TransparencyGridIcon className="w-[20px] h-[20px]" />
+              </Button>
+            </SheetTrigger>
+          </TooltipTrigger>
+          <TooltipContent className="bg-background">
+            <small className="text-foreground">스쿼드 보기</small>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>스쿼드 가격 체크</SheetTitle>
+          <SheetDescription>
+            스쿼드를 완성해 가격을 확인하세요.
+          </SheetDescription>
+        </SheetHeader>
+        <div className="flex gap-1 w-full justify-end">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={() => onClickUpdate()}>
+                  <UpdateIcon className="size-[20px]" />
                 </Button>
-              </SheetTrigger>
-            </TooltipTrigger>
-            <TooltipContent className="bg-background">
-              <small className="text-foreground">스쿼드 보기</small>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <SheetContent side="right">
-          <SheetHeader>
-            <SheetTitle>스쿼드 가격 체크</SheetTitle>
-            <SheetDescription>
-              스쿼드를 완성해 가격을 확인하세요.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="flex gap-1 w-full justify-end">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" onClick={() => onClickUpdate()}>
-                    <UpdateIcon className="size-[20px]" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-background">
-                  <small className="text-foreground">최신화</small>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" onClick={() => onClickReset()}>
-                    <ResetIcon className="size-[20px]" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-background">
-                  <small className="text-foreground">비우기</small>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <ScrollArea className="h-[70dvh] pr-1">
-            <div className="flex flex-col h-max gap-2 divide-y-2 divide-border">
-              {squadPlayers.map(({ player, enhance: playerEnhance }, idx) =>
-                player ? (
-                  <div className="px-1 pt-2 pb-1 relative w-full" key={idx}>
-                    <div className="flex flex-1">
-                      <ImageAspectRatio
-                        width={64}
-                        imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${player.imgId}.AVIF?raw=true`}
-                        alt={`${player.season}${player.name}이미지`}
-                      />
-                      <div className="flex flex-col justify-between">
-                        <div className="flex gap-1 items-center">
-                          <ImageAspectRatio
-                            width={20}
-                            imgSrc={`/season/${player.season}.png`}
-                            alt={`${player.season}이미지`}
-                          />
-                          <small>{player.name}</small>
-                        </div>
-                        <Select
-                          selectItems={Object.keys(enhance).map((value) => ({
-                            value: value,
-                            node: <div key={value}>{value}</div>,
-                          }))}
-                          onSelctCallback={(value) =>
-                            onChangeEnhance(
-                              idx,
-                              parseInt(value) as enhanceSelect
-                            )
-                          }
+              </TooltipTrigger>
+              <TooltipContent className="bg-background">
+                <small className="text-foreground">최신화</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" onClick={() => onClickReset()}>
+                  <ResetIcon className="size-[20px]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-background">
+                <small className="text-foreground">비우기</small>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <ScrollArea className="h-[70dvh] pr-1">
+          <div className="flex flex-col h-max gap-2 divide-y-2 divide-border">
+            {squadPlayers.map(({ player, enhance: playerEnhance }, idx) =>
+              player ? (
+                <div className="px-1 pt-2 pb-1 relative w-full" key={idx}>
+                  <div className="flex flex-1">
+                    <ImageAspectRatio
+                      width={64}
+                      imgSrc={`https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/${player.imgId}.AVIF?raw=true`}
+                      alt={`${player.season}${player.name}이미지`}
+                    />
+                    <div className="flex flex-col justify-between">
+                      <div className="flex gap-1 items-center">
+                        <ImageAspectRatio
+                          width={20}
+                          imgSrc={`/season/${player.season}.png`}
+                          alt={`${player.season}이미지`}
                         />
+                        <small>{player.name}</small>
                       </div>
-                    </div>
-                    <div className="absolute top-1 right-1">
-                      <Button
-                        variant="ghost"
-                        onClick={() => onDeletePlayer(idx)}
-                      >
-                        <TrashIcon className="size-[20px]" />
-                      </Button>
-                    </div>
-                    <div className="absolute bottom-1 right-1">
-                      <small>{`${bp2string(
-                        player?.[`bp${playerEnhance}`] || 0
-                      )} BP`}</small>
-                    </div>
-                    <div className="size-[16px] absolute left-0 top-0 rounded-full">
-                      {idx + 1}
+                      <Select
+                        value={`${playerEnhance}`}
+                        selectItems={Object.keys(enhance).map((value) => ({
+                          value: value,
+                          node: <div key={value}>{value}</div>,
+                        }))}
+                        onSelctCallback={(value) =>
+                          onChangeEnhance(idx, parseInt(value) as enhanceSelect)
+                        }
+                      />
                     </div>
                   </div>
-                ) : (
-                  <></>
-                )
-              )}
+                  <div className="absolute top-1 right-1">
+                    <Button variant="ghost" onClick={() => onDeletePlayer(idx)}>
+                      <TrashIcon className="size-[20px]" />
+                    </Button>
+                  </div>
+                  <div className="absolute bottom-1 right-1">
+                    <small>{`${bp2string(
+                      player?.[`bp${playerEnhance}`] || 0
+                    )} BP`}</small>
+                  </div>
+                  <div className="size-[16px] absolute left-0 top-0 rounded-full">
+                    {idx + 1}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )
+            )}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+        <SheetFooter>
+          <div className="flex flex-col w-full">
+            <div className="w-full flex justify-between">
+              <span className="text-muted-foreground font-bold">총 급여</span>
+              <span
+                className={
+                  allPay > 255 ? "text-destructive" : "text-foreground"
+                }
+              >
+                {`${allPay}/255`}
+              </span>
             </div>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-          <SheetFooter>
-            <div className="flex flex-col w-full">
-              <div className="w-full flex justify-between">
-                <span className="text-muted-foreground font-bold">총 급여</span>
-                <span
-                  className={
-                    allPay > 255 ? "text-destructive" : "text-foreground"
-                  }
-                >
-                  {`${allPay}/255`}
-                </span>
-              </div>
-              <div className="w-full flex justify-between">
-                <span className="text-muted-foreground font-bold">총 가격</span>
-                <span>{`${bp2string(allBP)} BP`}</span>
-              </div>
+            <div className="w-full flex justify-between">
+              <span className="text-muted-foreground font-bold">총 가격</span>
+              <span>{`${bp2string(allBP)} BP`}</span>
             </div>
-          </SheetFooter>
-        </SheetContent>
-      </CookiesProvider>
+          </div>
+        </SheetFooter>
+      </SheetContent>
     </Sheet>
   );
 };
@@ -214,8 +206,9 @@ const Select: React.FC<{
     value: string;
     node: React.ReactNode;
   }[];
+  value: string;
   onSelctCallback: (value: string) => void;
-}> = ({ selectItems, onSelctCallback }) => {
+}> = ({ selectItems, value, onSelctCallback }) => {
   const onSelectCallbackMobile = (e: ChangeEvent<HTMLSelectElement>) =>
     onSelctCallback(e.target.value);
   return (
@@ -223,8 +216,8 @@ const Select: React.FC<{
       <small className="text-xs absolute top-0 left-2 -translate-y-1/2">
         {"강화"}
       </small>
-      <SelectContainer onValueChange={onSelctCallback}>
-        <SelectTrigger className={"w-full hidden Medium:flex"}>
+      <SelectContainer value={value} onValueChange={onSelctCallback}>
+        <SelectTrigger className={"hidden Medium:flex w-[100px]"}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -238,8 +231,9 @@ const Select: React.FC<{
         </SelectContent>
       </SelectContainer>
       <select
+        value={value}
         onChange={onSelectCallbackMobile}
-        className={cn(CLASSNAME_SELECT, "flex Medium:hidden")}
+        className={cn(CLASSNAME_SELECT, "flex Medium:hidden w-[100px]")}
         id={`enhanceSelect`}
       >
         {selectItems.map((selectItem) => (
