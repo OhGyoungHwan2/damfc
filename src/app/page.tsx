@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 async function getRecommend() {
   const res = await fetch(`${process.env.BASE_URL}/api/recommend`, {
-    cache: "force-cache",
+    next: { revalidate: 86400 },
   });
   if (!res.ok) {
     throw new Error("Failed to fetch data");

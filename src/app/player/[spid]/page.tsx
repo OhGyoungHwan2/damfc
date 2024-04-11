@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 async function getPlayer(postId: string) {
   const res = await fetch(`${process.env.BASE_URL}/api/player/${postId}`, {
-    cache: "force-cache",
+    next: { revalidate: 604800 },
   });
   if (!res.ok) {
     throw new Error("Failed to fetch data");

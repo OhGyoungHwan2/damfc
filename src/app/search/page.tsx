@@ -19,7 +19,7 @@ export async function generateMetadata({
 
 async function getPlayer(name: string) {
   const res = await fetch(`${process.env.BASE_URL}/api/search?name=${name}`, {
-    cache: "force-cache",
+    next: { revalidate: 86400 },
   });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
