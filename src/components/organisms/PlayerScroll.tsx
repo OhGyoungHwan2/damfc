@@ -152,7 +152,7 @@ export const PlayerScroll_Scroll: React.FC<{
   // 액션
   return (
     <ScrollArea>
-      <div className="grid grid-flow-col grid-rows-1 Medium:grid-rows-2 gap-4 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:grid-flow-row Expanded:h-[calc(100vh-100px)] w-max Expanded:w-[360px]">
+      <div className="grid grid-flow-col grid-rows-1 Medium:grid-rows-2 gap-4 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:grid-flow-row Expanded:h-[calc(100vh-100px)] w-max Expanded:w-[306px] Large:grid-cols-2 Large:w-[612px]">
         {renderPlayerCard().isRender ? (
           renderPlayerCard().node
         ) : (

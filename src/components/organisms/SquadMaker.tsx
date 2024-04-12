@@ -52,6 +52,7 @@ const SquadMaker: React.FC = () => {
     onChangeEnhance,
     onDeletePlayer,
     onUpdateSquadPlayers,
+    onClear,
   } = useSquadContext();
 
   const allBP = squadPlayers.reduce((sum, { player, enhance }) => {
@@ -65,7 +66,7 @@ const SquadMaker: React.FC = () => {
   const onClickUpdate = () => {
     onUpdateSquadPlayers();
   };
-  const onClickReset = () => onUpdateSquadPlayers();
+  const onClickReset = () => onClear();
 
   return (
     <Sheet>
@@ -73,7 +74,11 @@ const SquadMaker: React.FC = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <SheetTrigger asChild>
-              <Button variant="outline" onClick={onClickUpdate}>
+              <Button
+                variant="outline"
+                name="스쿼드 보기"
+                onClick={onClickUpdate}
+              >
                 <TransparencyGridIcon className="w-[20px] h-[20px]" />
               </Button>
             </SheetTrigger>

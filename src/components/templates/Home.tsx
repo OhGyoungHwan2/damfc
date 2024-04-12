@@ -159,9 +159,9 @@ const Home: React.FC<{
       <section className="relative">
         <SelectTabs_Provider defaultValue={seasons[0]}>
           <h3 className="px-[16px] Expanded:px-[62px] Large:px-[106px] pt-[16px] pb-[24px]">
-            <small className="text-muted-foreground">{`포지션별 최고의 가치, 지금 바로 만나보세요!`}</small>
+            <small className="text-muted-foreground">{`시즌별 최고의 가치, 지금 바로 만나보세요!`}</small>
             <div className="flex items-center justify-between">
-              {`포지션 추천`}
+              {`시즌 추천`}
               <SelectTabs_Select
                 selectItems={createSelectItems(seasons, "season")}
                 className="w-[150px]"

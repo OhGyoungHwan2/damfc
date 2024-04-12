@@ -56,7 +56,7 @@ export const SelectTabs_Select: React.FC<{
   return (
     <div className={className}>
       <SelectContainer value={value} onValueChange={onSelctCallback}>
-        <SelectTrigger className={"w-full hidden Medium:flex"}>
+        <SelectTrigger name="Select" className={"w-full hidden Medium:flex"}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -73,7 +73,7 @@ export const SelectTabs_Select: React.FC<{
         value={value}
         onChange={onSelectCallbackMobile}
         className={cn(CLASSNAME_SELECT, "flex Medium:hidden")}
-        id={`${selectItems[0].value}select`}
+        name={`${selectItems[0].value}select`}
       >
         {selectItems.map((selectItem) => (
           <option

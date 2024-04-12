@@ -26,7 +26,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
         defaultPlayerRight={simPlayers[0]}
         teamcolors={teamcolors}
       >
-        <section className="Expanded:w-[calc(100vw-306px)] Expanded:max-w-[599px] h-full Expanded:h-[calc(100dvh-64px)] flex flex-col">
+        <section className="Expanded:w-[calc(100vw-306px)] h-full Expanded:h-[calc(100dvh-64px)] flex flex-col">
           <section className="px-[16px]">
             <Compare />
           </section>
@@ -74,7 +74,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             </div>
           </section>
         </section>
-        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[306px]">
+        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[306px] Large:w-[612px]">
           <PlayerScroll_Provider
             defaultCondition={conditionObj}
             teamcolors={teamcolors}

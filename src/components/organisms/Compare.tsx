@@ -13,7 +13,9 @@ import {
   TSelectAddStatus,
   status,
   statusGK,
+  traitKey2kr,
 } from "@/lib/const";
+import TraitImage from "./TraitImage";
 
 const Compare: React.FC = () => {
   const { playerLeft, playerRight, leftAddStatus, rightAddStatus } =
@@ -100,6 +102,18 @@ const PlayerOverview: React.FC<{
         addAll={addAll}
         enhance={enhance}
       />
+      <div
+        className={cn(
+          "w-full flex flex-wrap h-[36px]",
+          reverse && "flex-row-reverse"
+        )}
+      >
+        {Object.keys(traitKey2kr).map((key) =>
+          player[key as keyof typeof traitKey2kr] ? (
+            <TraitImage key={key} traitKey={key as keyof typeof traitKey2kr} />
+          ) : null
+        )}
+      </div>
     </div>
   );
 };

@@ -47,7 +47,7 @@ const TopAppBar: React.FC = () => {
               onChange={handleInputChange}
               onKeyUp={handleKeyUp}
             />
-            <Button type="submit" onClick={handleSearch}>
+            <Button name="선수 검색" type="submit" onClick={handleSearch}>
               <MagnifyingGlassIcon className="w-5 h-5" />
             </Button>
           </search>

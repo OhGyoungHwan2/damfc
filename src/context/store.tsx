@@ -80,6 +80,7 @@ export type SquadType = {
   onChangeEnhance: (idx: number, enhance: enhancePlayer["enhance"]) => void;
   onDeletePlayer: (idx: number) => void;
   onUpdateSquadPlayers: () => void;
+  onClear: () => void;
 };
 
 const SquadContext = createContext<SquadType>({
@@ -88,6 +89,7 @@ const SquadContext = createContext<SquadType>({
   onChangeEnhance: () => {},
   onDeletePlayer: () => {},
   onUpdateSquadPlayers: () => {},
+  onClear: () => {},
 });
 
 export const SquadProvider: React.FC<{
@@ -112,6 +114,11 @@ export const SquadProvider: React.FC<{
       pre.splice(idx, 1);
       return [...pre];
     });
+
+  const onClear = () => {
+    window.localStorage.setItem("squadPlayers", "[]");
+    setSquadPlayers([]);
+  };
 
   const onUpdateSquadPlayers = () => {
     const myStorageSquadPlayers = window.localStorage.getItem("squadPlayers");
@@ -138,6 +145,7 @@ export const SquadProvider: React.FC<{
         onChangeEnhance,
         onDeletePlayer,
         onUpdateSquadPlayers,
+        onClear,
       }}
     >
       {children}

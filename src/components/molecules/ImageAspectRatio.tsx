@@ -1,7 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 interface ImageAspectRatioProps {
   width: number | string;
@@ -16,28 +15,21 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
   alt,
   className = "",
 }) => {
-  const [currentImgSrc, setCurrentImgSrc] = useState(`${imgSrc}`);
-  const onErrorImage = () => {
-    if (imgSrc.includes("player")) {
-      setCurrentImgSrc(
-        "https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/not_found.AVIF?raw=true"
-      );
-    }
-  };
-  useEffect(() => {
-    setCurrentImgSrc(imgSrc);
-  }, [imgSrc]);
   return (
     <div className="relative flex-shrink-0" style={{ width: width }}>
       <Image
         width={0}
         height={0}
         sizes="100vw"
-        src={`${currentImgSrc}`}
+        src={`${imgSrc}`}
         className={cn("w-full h-auto", className)}
         alt={alt}
         placeholder={"empty"}
-        onError={() => onErrorImage()}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src =
+            "https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/not_found.AVIF?raw=true";
+        }}
       />
     </div>
   );

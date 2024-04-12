@@ -1,11 +1,18 @@
 "use client";
 
+import { Roboto_Mono } from "next/font/google";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { usePlayerCompareContext } from "@/context/store";
 import { TSelectAddStatus, statusOrder, status, statusGK } from "@/lib/const";
 import { point2color } from "@/lib/cssfuntion";
+import { cn } from "@/lib/utils";
 
 const AllStatus = { ...status, ...statusGK };
+
+const robotoMono = Roboto_Mono({
+  weight: "700",
+  subsets: ["latin"],
+});
 
 const CompareTable: React.FC = () => {
   const { playerLeft, playerRight, leftAddStatus, rightAddStatus } =
@@ -25,7 +32,7 @@ const CompareTable: React.FC = () => {
 
   return (
     <ScrollArea id="ScrollAreaWrapRow" className="size-full">
-      <div className="flex flex-col flex-wrap justify-start h-full gap-0 w-max">
+      <div className="flex flex-col flex-wrap justify-start h-full gap-0 w-max items-center text-sm Large:text-base">
         {statusOrder.map((statusKey) => {
           const leftCell =
             playerLeft[statusKey] + addStatus2point(leftAddStatus, statusKey);
@@ -35,19 +42,47 @@ const CompareTable: React.FC = () => {
           return (
             <div
               key={statusKey}
-              className="grid justify-center grid-cols-4 gap-1 text-sm w-[230px] border-r-2 border-border"
+              className="flex gap-1 border-r-2 border-border"
             >
-              <div className="col-span-1 text-right">
+              <div
+                className={cn(
+                  "text-right w-[60px] Large:w-[70px]",
+                  robotoMono.className
+                )}
+              >
                 <span className="text-primary">
                   {gapLeftRight > 0 && `+${gapLeftRight} `}
                 </span>
-                <span className={point2color(leftCell)}>{leftCell}</span>
+                <span className={point2color(leftCell)}>
+                  {leftCell < 100 ? (
+                    <>&nbsp;</>
+                  ) : leftCell < 10 ? (
+                    <>&nbsp;&nbsp;</>
+                  ) : (
+                    <></>
+                  )}
+                  {leftCell}
+                </span>
               </div>
-              <div className="col-span-2 text-center">
+              <div className="text-center w-[100px] justify-self-center">
                 {AllStatus[statusKey]}
               </div>
-              <div className="col-span-1 text-left">
-                <span className={point2color(rightCell)}>{rightCell}</span>
+              <div
+                className={cn(
+                  "text-left w-[60px] Large:w-[70px]",
+                  robotoMono.className
+                )}
+              >
+                <span className={point2color(rightCell)}>
+                  {rightCell}
+                  {rightCell < 100 ? (
+                    <>&nbsp;</>
+                  ) : rightCell < 10 ? (
+                    <>&nbsp;&nbsp;</>
+                  ) : (
+                    <></>
+                  )}
+                </span>
                 <span className="text-primary">
                   {gapLeftRight < 0 && ` +${gapLeftRight * -1}`}
                 </span>
