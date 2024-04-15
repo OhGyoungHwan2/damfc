@@ -53,8 +53,8 @@ const Compare: React.FC = () => {
         <Radar1To1
           target1={pickStatus(playerLeft, Object.keys(statusKey))}
           target2={pickStatus(playerRight, Object.keys(statusKey))}
-          target1Name={playerLeft.name}
-          target2Name={playerRight.name}
+          target1Name={`${playerLeft.season}${playerLeft.name}`}
+          target2Name={`${playerRight.season}${playerRight.name}`}
           viewKeys={statusKey}
           target1AddPoint={createAddPoint(leftAddStatus)}
           target2AddPoint={createAddPoint(rightAddStatus)}

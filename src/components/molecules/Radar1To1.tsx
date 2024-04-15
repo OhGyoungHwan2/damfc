@@ -44,8 +44,8 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
 
   // 액션
   const handleSliceTooltip = (item: RadarSliceTooltipProps) => {
-    const leftData = item.data[1];
-    const rightData = item.data[0];
+    const leftData = item.data[0];
+    const rightData = item.data[1];
     setTooltipItems((pre) => ({
       ...pre,
       index: `${item.index}`,
@@ -67,7 +67,7 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
       <div className="aspect-square">
         <ResponsiveRadar
           data={data}
-          keys={[target2Name, target1Name]}
+          keys={[target1Name, target2Name]}
           indexBy={"key"}
           margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
           valueFormat={">-.0f"}
@@ -78,13 +78,18 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
             handleSliceTooltip({ ...item });
             return undefined;
           }}
-          colors={["#ffa800", "#227440"]}
+          colors={(temp) => {
+            return temp.index == 0 ? "#ffa800" : "#227440";
+          }}
         />
       </div>
-      <div className="grid grid-cols-5 pt-1 text-center text-nowrap">
-        <small className="text-[#227440]">{tooltipItems.value1}</small>
-        <small className="col-span-3">{viewKeys[tooltipItems.index]}</small>
-        <small className="text-[#ffa800]">{tooltipItems.value2}</small>
+      <div className="grid grid-cols-3 pt-1 text-center text-nowrap">
+        <small className="col-span-2">{`${
+          viewKeys[tooltipItems.index]
+        }`}</small>
+        <small className="text-primary">
+          {Math.abs(tooltipItems.value1 - tooltipItems.value2)}
+        </small>
       </div>
     </>
   );
