@@ -1,8 +1,13 @@
-const BPUNITS = ["", "만", "억", "조", "경"];
+const BPUNITS = ["만", "억", "조", "경"];
 
 export function bp2string(number?: number | null) {
   let idx = 0;
   let bp = number || 0;
+
+  if (bp / 1000 >= 1) {
+    bp /= 1000;
+    idx++;
+  }
   while (bp / 10000 >= 1) {
     bp /= 10000;
     idx++;

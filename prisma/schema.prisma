@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
 }
 
@@ -15,16 +15,26 @@ model player {
   agility          Int
   balance          Int
   ballcontrol      Int
-  bp1 Int?
-  bp2 Int?
-  bp3 Int?
-  bp4 Int?
-  bp5 Int?
-  bp6 Int?
-  bp7 Int?
-  bp8 Int?
-  bp9 Int?
-  bp10 Int?
+  /// Multiple data types found: Int: 92.9%, BigInt: 7.1% out of 397 sampled entries
+  bp1              Int?
+  /// Multiple data types found: Int: 12.6%, BigInt: 87.4% out of 397 sampled entries
+  bp10             Int?
+  /// Multiple data types found: Int: 90.9%, BigInt: 9.1% out of 397 sampled entries
+  bp2              Int?
+  /// Multiple data types found: Int: 88.9%, BigInt: 11.1% out of 397 sampled entries
+  bp3              Int?
+  /// Multiple data types found: Int: 82.9%, BigInt: 17.1% out of 397 sampled entries
+  bp4              Int?
+  /// Multiple data types found: Int: 71%, BigInt: 29% out of 397 sampled entries
+  bp5              Int?
+  /// Multiple data types found: Int: 57.9%, BigInt: 42.1% out of 397 sampled entries
+  bp6              Int?
+  /// Multiple data types found: Int: 45.1%, BigInt: 54.9% out of 397 sampled entries
+  bp7              Int?
+  /// Multiple data types found: Int: 33%, BigInt: 67% out of 397 sampled entries
+  bp8              Int?
+  /// Multiple data types found: Int: 17.9%, BigInt: 82.1% out of 397 sampled entries
+  bp9              Int?
   composure        Int
   crossing         Int
   curve            Int
@@ -38,6 +48,7 @@ model player {
   gkreflexes       Int
   headingaccuracy  Int
   height           Int
+  imgId            String
   imgSrc           String
   interceptions    Int
   jumping          Int
@@ -99,7 +110,7 @@ model player {
   volleys          Int
   weakfoot         Int
   weight           Int
-  imgId String
+
   teamcolors      teamcolor_player[]
   playerSimilarityPlayer      player_similarity[] @relation("players")
   playerSimilaritySimPlayer       player_similarity[] @relation("simPlayers")
@@ -112,17 +123,19 @@ model player_similarity {
   playerId    Int
   playerSimId Int
   rank        Int
+
   players   player @relation(fields: [playerId], references: [id], name: "players")
   simPlayers   player @relation(fields: [playerSimId], references: [id], name: "simPlayers")
   @@index([playerId], map: "playerId_1")
 }
 
 model ranker {
-  id         Int @id @map("_id")
+  id         Int    @id @map("_id")
   controller String
   matchId    String
   nickname   String
   ouid       String
+
   players ranker_player[]
 }
 
@@ -162,6 +175,7 @@ model teamcolor {
   category       String
   level          String
   name           String
+
   player teamcolor_player[]
 }
 
