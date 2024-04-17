@@ -3,6 +3,7 @@ import "lazysizes";
 import TopAppBar from "../components/organisms/TopAppBar";
 import { ThemeProvider } from "@/lib/provider/theme-provider";
 import { SquadProvider } from "@/context/store";
+import Footer from "@/components/organisms/Footer";
 
 export default function RootLayout({
   children,
@@ -24,6 +25,7 @@ export default function RootLayout({
               {children}
             </main>
           </SquadProvider>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

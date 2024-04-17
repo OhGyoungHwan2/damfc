@@ -153,12 +153,12 @@ const SquadMaker: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="absolute top-1 right-1">
+                  <div className="absolute top-1 right-1 bg-background">
                     <Button variant="ghost" onClick={() => onDeletePlayer(idx)}>
                       <TrashIcon className="size-[20px]" />
                     </Button>
                   </div>
-                  <div className="absolute bottom-1 right-1">
+                  <div className="absolute bottom-1 right-1 bg-background">
                     <small>{`${bp2string(
                       player?.[`bp${playerEnhance}`] || 0
                     )} BP`}</small>
