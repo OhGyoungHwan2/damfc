@@ -4,7 +4,7 @@ import { Roboto_Mono } from "next/font/google";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { usePlayerCompareContext } from "@/context/store";
 import { TSelectAddStatus, statusOrder, status, statusGK } from "@/lib/const";
-import { point2color } from "@/lib/cssfuntion";
+import { bp2string, point2color } from "@/lib/cssfuntion";
 import { cn } from "@/lib/utils";
 
 const AllStatus = { ...status, ...statusGK };
@@ -86,6 +86,47 @@ const CompareTable: React.FC = () => {
                 <span className="text-primary">
                   {gapLeftRight < 0 && ` +${gapLeftRight * -1}`}
                 </span>
+              </div>
+            </div>
+          );
+        })}
+        {(
+          [
+            "bp1",
+            "bp2",
+            "bp3",
+            "bp4",
+            "bp5",
+            "bp6",
+            "bp7",
+            "bp8",
+            "bp9",
+            "bp10",
+          ] as const
+        ).map((key) => {
+          return (
+            <div
+              key={key}
+              className="flex gap-1 border-r-2 border-border items-center"
+            >
+              <div
+                className={cn(
+                  "text-right w-[60px] Large:w-[70px] text-muted-foreground text-xs",
+                  robotoMono.className
+                )}
+              >
+                <span>{bp2string(playerLeft[key] || 0)}</span>
+              </div>
+              <div className="text-center w-[100px] justify-self-center">
+                {`${key.replace("bp", "")}강`}
+              </div>
+              <div
+                className={cn(
+                  "text-left w-[60px] Large:w-[70px] text-muted-foreground text-xs",
+                  robotoMono.className
+                )}
+              >
+                <span>{bp2string(playerRight[key] || 0)}</span>
               </div>
             </div>
           );

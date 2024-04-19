@@ -196,7 +196,8 @@ export type TAddStatusSelectCategory =
   | "adaptability"
   | "enhanceTeamcolor"
   | "feature"
-  | "affiliation";
+  | "affiliation"
+  | "defaultTeamcolor";
 export type TSelectAddStatus = Partial<
   Record<TAddStatusSelectCategory, TAddStatus>
 >;

@@ -12,7 +12,7 @@ export function bp2string(number?: number | null) {
     bp /= 10000;
     idx++;
   }
-  return `${bp.toFixed(Math.floor(idx / 3))}${BPUNITS[idx]}`;
+  return `${bp.toFixed(Math.floor(idx / 2))}${BPUNITS[idx]}`;
 }
 
 export function position2color(position: string) {

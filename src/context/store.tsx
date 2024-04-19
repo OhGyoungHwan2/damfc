@@ -4,6 +4,8 @@ import { TRecommend } from "@/app/api/recommend/route";
 import { TSelectAddStatus } from "@/lib/const";
 import { createContext, useContext, useEffect, useState } from "react";
 
+// 비교 State
+
 type PlayerCompareType = {
   playerLeft: TGETPlayer["player"];
   setPlayerLeft: (value: TGETPlayer["player"]) => void;
@@ -66,6 +68,8 @@ export const PlayerCompareProvider: React.FC<{
 };
 
 export const usePlayerCompareContext = () => useContext(PlayerCompareContext);
+
+// 스쿼드 State
 
 type enhancePlayer = {
   enhance: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;

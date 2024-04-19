@@ -32,14 +32,17 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
           </section>
           <section className="px-[16px]">
             <div className="grid grid-cols-2">
-              <div className="grid grid-cols-6">
-                <div className="col-span-2">
-                  <SelectStatus type="enhance" dir="left" />
-                </div>
-                <div className="col-span-2">
+              <div className="grid grid-cols-6 Medium:grid-cols-9">
+                <div className="col-span-3">
                   <SelectStatus type="adaptability" dir="left" />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-3">
+                  <SelectStatus type="enhance" dir="left" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="defaultTeamcolor" dir="left" />
+                </div>
+                <div className="col-span-3">
                   <SelectStatus type="enhanceTeamcolor" dir="left" />
                 </div>
                 <div className="col-span-3">
@@ -49,14 +52,17 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
                   <SelectStatus type="feature" dir="left" />
                 </div>
               </div>
-              <div className="grid grid-cols-6">
-                <div className="col-span-2">
-                  <SelectStatus type="enhance" dir="right" />
-                </div>
-                <div className="col-span-2">
+              <div className="grid grid-cols-6 Medium:grid-cols-9">
+                <div className="col-span-3">
                   <SelectStatus type="adaptability" dir="right" />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-3">
+                  <SelectStatus type="enhance" dir="right" />
+                </div>
+                <div className="col-span-3">
+                  <SelectStatus type="defaultTeamcolor" dir="right" />
+                </div>
+                <div className="col-span-3">
                   <SelectStatus type="enhanceTeamcolor" dir="right" />
                 </div>
                 <div className="col-span-3">
@@ -80,7 +86,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             teamcolors={teamcolors}
           >
             <PlayerScroll_Filter />
-            <PlayerScroll_Scroll players={simPlayers} />
+            <PlayerScroll_Scroll players={[player, ...simPlayers]} />
           </PlayerScroll_Provider>
         </section>
       </PlayerCompareProvider>

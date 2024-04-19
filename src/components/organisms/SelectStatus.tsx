@@ -70,6 +70,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "adaptability":
       return (
         <Select
+          label="적응도"
           onSelctCallback={(value: string) =>
             setAddStatus({
               ...addStatus,
@@ -86,6 +87,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "enhance":
       return (
         <Select
+          label="강화"
           onSelctCallback={(value: string) =>
             setAddStatus({
               ...addStatus,
@@ -102,6 +104,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "enhanceTeamcolor":
       return (
         <Select
+          label="강화팀컬러"
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -125,6 +128,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "affiliation":
       return (
         <Select
+          label="소속"
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -157,6 +161,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "feature":
       return (
         <Select
+          label="특성"
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -186,6 +191,23 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
           player={player}
         />
       );
+    case "defaultTeamcolor":
+      return (
+        <Select
+          label="기본팀컬러"
+          onSelctCallback={(value: string) =>
+            setAddStatus({
+              ...addStatus,
+              defaultTeamcolor: { all: parseInt(value) },
+            })
+          }
+          selectItems={[...Array(9).keys()].map((key) => ({
+            value: `${key}`,
+            node: <div key={key}>{key}</div>,
+          }))}
+          player={player}
+        />
+      );
   }
 };
 
@@ -199,7 +221,15 @@ const Select: React.FC<{
   className?: string;
   onSelctCallback: (value: string) => void;
   player: TGETPlayer["player"];
-}> = ({ selectItems, className, isNoneSelect, onSelctCallback, player }) => {
+  label: string;
+}> = ({
+  selectItems,
+  className,
+  isNoneSelect,
+  onSelctCallback,
+  player,
+  label,
+}) => {
   const [value, setValue] = useState(isNoneSelect ? "-" : selectItems[0].value);
 
   const onSelectCallbackWeb = (value: string) => (
@@ -214,7 +244,10 @@ const Select: React.FC<{
   }, [player]);
 
   return (
-    <div className={className}>
+    <div className={cn(className, "relative")}>
+      <p className="absolute top-[1px] left-1 text-muted-foreground text-xs pointer-events-none">
+        {label}
+      </p>
       <SelectContainer value={value} onValueChange={onSelectCallbackWeb}>
         <SelectTrigger className={"w-full hidden Medium:flex"}>
           <SelectValue />
