@@ -26,7 +26,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import StateLayer from "@/components/atoms/StateLayer";
 import { Button } from "@/components/ui/button";
-import { number2physical, status, statusGK } from "@/lib/const";
+import { number2physical, positions, status, statusGK } from "@/lib/const";
 import { usePlayerCompareContext } from "@/context/store";
 import { deleteCookies, setCookies } from "@/lib/actions";
 import PlayerCard from "./PlayerCard";
@@ -45,7 +45,8 @@ type allCondition =
   | "mainfoot"
   | "weakfoot"
   | "physical"
-  | "enhanceBp";
+  | "enhanceBp"
+  | "position";
 
 type conditionValue =
   | string
@@ -133,6 +134,9 @@ export const PlayerScroll_Scroll: React.FC<{
               | "bp10";
             const tempBp = tempValue["bp"];
             return (player[tempEnhance] || 0) / 1000 <= parseInt(tempBp);
+          } else if ("position" == key) {
+            const tempValue = value;
+            return player.position === tempValue;
           }
           return true;
         });
@@ -215,6 +219,10 @@ export const PlayerScroll_Filter: React.FC = () => {
     .sort((pre, next) =>
       pre.text < next.text ? -1 : pre.text > next.text ? 1 : 0
     );
+  const positionSelectItem = positions.map((value) => ({
+    value: value,
+    node: <div key={value}>{value}</div>,
+  }));
   const mainfootSelectItem = ["왼발", "오른발"].map((value) => ({
     value: value === "왼발" ? `1` : `-1`,
     node: <div key={value}>{value}</div>,
@@ -293,6 +301,14 @@ export const PlayerScroll_Filter: React.FC = () => {
           selectItems={featureSelectItem}
           onSelctCallback={(value: string) => onSelctCallback(value, "feature")}
           className="w-[150px]"
+        />
+        <Select
+          label="포지션"
+          selectItems={positionSelectItem}
+          onSelctCallback={(value: string) =>
+            onSelctCallback(value, "position")
+          }
+          className="w-[100px]"
         />
         <Select
           label="주발"

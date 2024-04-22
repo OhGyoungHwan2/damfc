@@ -72,6 +72,24 @@ export const statusGK = {
   gkpositioning: "GK 위치 선정",
 } as const;
 
+export const positions = [
+  "ST",
+  "CF",
+  "LW",
+  "RW",
+  "CM",
+  "CAM",
+  "CDM",
+  "LM",
+  "RM",
+  "CB",
+  "LB",
+  "RB",
+  "LWB",
+  "RWB",
+  "GK",
+] as const;
+
 export const statusPhysical = {
   height: "키",
   weight: "몸무게",

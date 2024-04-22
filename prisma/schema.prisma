@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextIndex","fullTextSearch"]
 }
 
 datasource db {
@@ -116,6 +116,8 @@ model player {
   playerSimilaritySimPlayer       player_similarity[] @relation("simPlayers")
   recommends recommend[]
   rankerPlayer ranker_player[]
+
+  @@fulltext([name])
 }
 
 model player_similarity {
@@ -126,7 +128,7 @@ model player_similarity {
 
   players   player @relation(fields: [playerId], references: [id], name: "players")
   simPlayers   player @relation(fields: [playerSimId], references: [id], name: "simPlayers")
-  @@index([playerId], map: "playerId_1")
+  @@index([playerId])
 }
 
 model ranker {
