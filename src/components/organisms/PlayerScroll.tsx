@@ -539,7 +539,7 @@ export const PlayerScroll_Filter: React.FC = () => {
                           key={key}
                           className="border-b border-border text-muted-foreground"
                         >
-                          {`${teamcolors[tempKey][parseInt(tempTeamId)].name}`}
+                          {`${teamcolors[tempKey][parseInt(tempTeamId)]?.name}`}
                           <Button
                             onClick={() => onClickDelete(tempKey)}
                             variant="ghost"
