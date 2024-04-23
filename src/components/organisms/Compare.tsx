@@ -82,11 +82,12 @@ const PlayerOverview: React.FC<{
     (addStatus["adaptability"]?.all || 0) +
     (addStatus["enhance"]?.all || 0) +
     (addStatus["enhanceTeamcolor"]?.all || 0) +
-    (addStatus["affiliation"]?.all || 0);
+    (addStatus["affiliation"]?.all || 0) +
+    (addStatus["defaultTeamcolor"]?.all || 0);
   const enhance =
-    addStatus["enhance"]?.all || 0 > 14
+    (addStatus["enhance"]?.all || 0) > 14
       ? 8
-      : addStatus["enhance"]?.all || 0 > 5
+      : (addStatus["enhance"]?.all || 0) > 5
       ? 5
       : 1;
   return (

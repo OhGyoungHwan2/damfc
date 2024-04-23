@@ -30,7 +30,7 @@ export const SelectTabs_Provider: React.FC<{
   defaultValue: string;
 }> = ({ children, defaultValue }) => {
   const [value, setValue] = useState(defaultValue);
-  const onSelctCallback = (value: string) => setValue(value.toUpperCase());
+  const onSelctCallback = (value: string) => setValue(value);
   return (
     <SelectTabsContext.Provider
       value={{

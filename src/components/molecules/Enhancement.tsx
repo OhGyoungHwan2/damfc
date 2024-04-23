@@ -20,9 +20,15 @@ const Enhancement: React.FC<EnhancementProps> = ({
   const bgTextColor = getBgTextColor(enhance);
 
   return (
-    <small className={cn("font-extrabold", bgTextColor, className)}>
-      {enhance}
-    </small>
+    <div
+      className={cn(
+        "font-extrabold text-center flex items-center justify-center",
+        bgTextColor,
+        className
+      )}
+    >
+      <small>{enhance}</small>
+    </div>
   );
 };
 export default Enhancement;

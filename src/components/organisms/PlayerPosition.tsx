@@ -32,7 +32,7 @@ const PlayerPosition: React.FC<PlayerProfileProps> = ({
 
   const renderGrade = () => {
     if (!grade) return null;
-    return <Enhancement enhance={grade} className="px-0.5 Medium:px-2" />;
+    return <Enhancement enhance={grade} className="w-[24px] h-[16px]" />;
   };
 
   return (

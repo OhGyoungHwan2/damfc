@@ -105,7 +105,14 @@ export const SquadProvider: React.FC<{
 
   const onAddSquadPlayer = (
     player: TGETPlayer["player"] | TRecommend["player"]
-  ) => setSquadPlayers((pre) => [...pre, { player: player, enhance: 1 }]);
+  ) =>
+    setSquadPlayers((pre) => {
+      return pre.some(
+        (playerEnhance) => playerEnhance.player?.id === player?.id
+      )
+        ? [...pre]
+        : [...pre, { player: player, enhance: 1 }];
+    });
 
   const onChangeEnhance = (idx: number, enhance: enhancePlayer["enhance"]) =>
     setSquadPlayers((pre) => {

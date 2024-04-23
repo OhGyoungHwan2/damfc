@@ -104,7 +104,8 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "enhanceTeamcolor":
       return (
         <Select
-          label="강화팀컬러"
+          label="강화"
+          isTeamcolor
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -129,6 +130,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
       return (
         <Select
           label="소속"
+          isTeamcolor
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -162,6 +164,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
       return (
         <Select
           label="특성"
+          isTeamcolor
           isNoneSelect
           onSelctCallback={(value: string) => {
             value === "-"
@@ -194,7 +197,7 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
     case "defaultTeamcolor":
       return (
         <Select
-          label="기본팀컬러"
+          label="팀컬러"
           onSelctCallback={(value: string) =>
             setAddStatus({
               ...addStatus,
@@ -218,6 +221,7 @@ const Select: React.FC<{
     text?: string;
   }[];
   isNoneSelect?: boolean;
+  isTeamcolor?: boolean;
   className?: string;
   onSelctCallback: (value: string) => void;
   player: TGETPlayer["player"];
@@ -226,6 +230,7 @@ const Select: React.FC<{
   selectItems,
   className,
   isNoneSelect,
+  isTeamcolor,
   onSelctCallback,
   player,
   label,
@@ -247,10 +252,16 @@ const Select: React.FC<{
     <div className={cn(className, "relative")}>
       <p className="absolute top-[1px] left-1 text-muted-foreground text-xs pointer-events-none">
         {label}
+        {isTeamcolor && (
+          <>
+            <br className="Medium:hidden" />
+            팀컬러
+          </>
+        )}
       </p>
       <SelectContainer value={value} onValueChange={onSelectCallbackWeb}>
         <SelectTrigger className={"w-full hidden Medium:flex"}>
-          <SelectValue />
+          <SelectValue className={cn(value === "-" && "text-transparent")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -270,9 +281,10 @@ const Select: React.FC<{
         name="statusSelect"
       >
         {isNoneSelect && (
-          <option value="-" className="bg-popover text-popover-foreground">
-            -
-          </option>
+          <option
+            value="-"
+            className="bg-popover text-popover-foreground"
+          ></option>
         )}
         {selectItems.map((selectItem) => (
           <option

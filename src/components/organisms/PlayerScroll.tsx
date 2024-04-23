@@ -22,6 +22,16 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import StateLayer from "@/components/atoms/StateLayer";
@@ -33,6 +43,7 @@ import PlayerCard from "./PlayerCard";
 import { cn } from "@/lib/utils";
 import { SquadAddPlayer } from "./SquadMaker";
 import { Input } from "../ui/input";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 
 const CLASSNAME_SELECT =
   "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1";
@@ -154,7 +165,7 @@ export const PlayerScroll_Scroll: React.FC<{
                     idx === 3 && "bg-[#CD7F32]"
                   )}
                 >
-                  {idx}
+                  {idx === 0 ? "-" : idx}
                 </div>
               </ContextMenuTrigger>
               <ContextMenuContent>
@@ -178,7 +189,7 @@ export const PlayerScroll_Scroll: React.FC<{
   // 액션
   return (
     <ScrollArea>
-      <div className="grid grid-flow-col grid-rows-1 Medium:grid-rows-2 gap-4 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:items-start Expanded:grid-flow-row Expanded:h-[calc(100vh-108px)] w-max Expanded:w-[306px] Large:grid-cols-2 Large:w-[612px]">
+      <div className="grid content-start grid-flow-col grid-rows-1 Medium:grid-rows-2 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:items-start Expanded:grid-flow-row Expanded:h-[calc(100dvh-64px)] w-max Expanded:w-[306px] Large:grid-cols-2 Large:w-[612px]">
         {renderPlayerCard().isRender ? (
           renderPlayerCard().node
         ) : (
@@ -270,119 +281,361 @@ export const PlayerScroll_Filter: React.FC = () => {
     return () => clearTimeout(timeOutId);
   }, [filterStatus["value"]]);
 
+  // return (
+  //   <ScrollArea>
+  //     <div className="flex items-center gap-1 pb-2 w-max">
+  //       <Button
+  //         onClick={() => (
+  //           setCookies("condition", condition), alert("고정 완료")
+  //         )}
+  //       >
+  //         고정
+  //       </Button>
+  //       <Button
+  //         variant="destructive"
+  //         onClick={() => (
+  //           deleteCookies("condition"), setCondition({}), alert("초기화 완료")
+  //         )}
+  //       >
+  //         초기화
+  //       </Button>
+  //       <Select
+  //         label="소속"
+  //         selectItems={affiliationSelectItem}
+  //         onSelctCallback={(value: string) =>
+  //           onSelctCallback(value, "affiliation")
+  //         }
+  //         className="w-[150px]"
+  //       />
+  //       <Select
+  //         label="특성"
+  //         selectItems={featureSelectItem}
+  //         onSelctCallback={(value: string) => onSelctCallback(value, "feature")}
+  //         className="w-[150px]"
+  //       />
+  //       <Select
+  //         label="포지션"
+  //         selectItems={positionSelectItem}
+  //         onSelctCallback={(value: string) =>
+  //           onSelctCallback(value, "position")
+  //         }
+  //         className="w-[100px]"
+  //       />
+  //       <Select
+  //         label="주발"
+  //         selectItems={mainfootSelectItem}
+  //         onSelctCallback={(value: string) =>
+  //           onSelctCallback(value, "mainfoot")
+  //         }
+  //         className="w-[100px]"
+  //       />
+  //       <Select
+  //         label="체형"
+  //         selectItems={physicalSelectItem}
+  //         onSelctCallback={(value: string) =>
+  //           onSelctCallback(value, "physical")
+  //         }
+  //         className="w-[100px]"
+  //       />
+  //       <div className="w-[2px] bg-border mx-4" />
+  //       <Select
+  //         label="강화 기준"
+  //         selectItems={enhanceSelectItem}
+  //         onSelctCallback={(value: string) =>
+  //           setFilterStatus((pre) => ({
+  //             ...pre,
+  //             filterCondition: `bp${value}`,
+  //           }))
+  //         }
+  //         className="w-[100px]"
+  //       />
+  //       <div className="relative">
+  //         <Input
+  //           name="BP"
+  //           type="number"
+  //           className="w-[150px]"
+  //           placeholder="최대"
+  //           min={0}
+  //           max={100000000}
+  //           onChange={(e) => {
+  //             const temp = e.currentTarget.value;
+  //             setFilterStatus((pre) => ({ ...pre, value: temp }));
+  //           }}
+  //         />
+  //         <div className="absolute right-[50px] text-muted-foreground z-10 top-1/2 -translate-y-1/2">
+  //           억BP
+  //         </div>
+  //       </div>
+  //       <Button variant="ghost" onClick={onClickAdd}>
+  //         추가
+  //       </Button>
+  //       {Object.entries(condition).map(([key, value]) => {
+  //         if (key == "enhanceBp") {
+  //           const tempValue = value as { enhance: string; bp: string };
+  //           return (
+  //             <div
+  //               key="enhanceBp"
+  //               className="border-b border-border text-muted-foreground"
+  //             >
+  //               {`${tempValue["enhance"].replace("bp", "")}강 ${
+  //                 tempValue["bp"]
+  //               }억 이하`}
+  //               <Button
+  //                 onClick={() => onClickDelete("enhanceBp")}
+  //                 variant="ghost"
+  //               >
+  //                 X
+  //               </Button>
+  //             </div>
+  //           );
+  //         }
+  //         return <></>;
+  //       })}
+  //     </div>
+  //     <ScrollBar orientation="horizontal" />
+  //   </ScrollArea>
+  // );
   return (
-    <ScrollArea>
-      <div className="flex gap-1 w-max items-center pb-2">
-        <Button
-          onClick={() => (
-            setCookies("condition", condition), alert("고정 완료")
-          )}
-        >
-          고정
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="default" name="필터링">
+          <MixerHorizontalIcon className="w-[20px] h-[20px]" />
         </Button>
-        <Button
-          variant="destructive"
-          onClick={() => (
-            deleteCookies("condition"), setCondition({}), alert("초기화 완료")
-          )}
-        >
-          초기화
-        </Button>
-        <Select
-          label="소속"
-          selectItems={affiliationSelectItem}
-          onSelctCallback={(value: string) =>
-            onSelctCallback(value, "affiliation")
-          }
-          className="w-[150px]"
-        />
-        <Select
-          label="특성"
-          selectItems={featureSelectItem}
-          onSelctCallback={(value: string) => onSelctCallback(value, "feature")}
-          className="w-[150px]"
-        />
-        <Select
-          label="포지션"
-          selectItems={positionSelectItem}
-          onSelctCallback={(value: string) =>
-            onSelctCallback(value, "position")
-          }
-          className="w-[100px]"
-        />
-        <Select
-          label="주발"
-          selectItems={mainfootSelectItem}
-          onSelctCallback={(value: string) =>
-            onSelctCallback(value, "mainfoot")
-          }
-          className="w-[100px]"
-        />
-        <Select
-          label="체형"
-          selectItems={physicalSelectItem}
-          onSelctCallback={(value: string) =>
-            onSelctCallback(value, "physical")
-          }
-          className="w-[100px]"
-        />
-        <div className="w-[2px] bg-border mx-4" />
-        <Select
-          label="강화 기준"
-          selectItems={enhanceSelectItem}
-          onSelctCallback={(value: string) =>
-            setFilterStatus((pre) => ({
-              ...pre,
-              filterCondition: `bp${value}`,
-            }))
-          }
-          className="w-[100px]"
-        />
-        <div className="relative">
-          <Input
-            name="BP"
-            type="number"
-            className="w-[150px]"
-            placeholder="최대"
-            min={0}
-            max={100000000}
-            onChange={(e) => {
-              const temp = e.currentTarget.value;
-              setFilterStatus((pre) => ({ ...pre, value: temp }));
-            }}
-          />
-          <div className="absolute right-[50px] text-muted-foreground z-10 top-1/2 -translate-y-1/2">
-            억BP
-          </div>
-        </div>
-        <Button variant="ghost" onClick={onClickAdd}>
-          추가
-        </Button>
-        {Object.entries(condition).map(([key, value]) => {
-          if (key == "enhanceBp") {
-            const tempValue = value as { enhance: string; bp: string };
-            return (
-              <div
-                key="enhanceBp"
-                className="border-b border-border text-muted-foreground"
-              >
-                {`${tempValue["enhance"].replace("bp", "")}강 ${
-                  tempValue["bp"]
-                }억 이하`}
-                <Button
-                  onClick={() => onClickDelete("enhanceBp")}
-                  variant="ghost"
-                >
-                  X
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>결과 필터링</DialogTitle>
+          <DialogDescription>
+            조건을 통해 원하는 선수만 필터링하세요.
+          </DialogDescription>
+        </DialogHeader>
+        <ScrollArea className="size-full">
+          <div className="flex flex-col justify-start gap-2 h-max">
+            {/* 팀컬러 */}
+            <div>
+              <span className="text-primary">팀컬러</span>
+              <div className="flex flex-wrap gap-2">
+                <Select
+                  label="소속"
+                  selectItems={affiliationSelectItem}
+                  onSelctCallback={(value: string) =>
+                    onSelctCallback(value, "affiliation")
+                  }
+                  className="w-[150px]"
+                />
+                <Select
+                  label="특성"
+                  selectItems={featureSelectItem}
+                  onSelctCallback={(value: string) =>
+                    onSelctCallback(value, "feature")
+                  }
+                  className="w-[150px]"
+                />
+              </div>
+            </div>
+            {/* 가격 */}
+            <div>
+              <span className="text-primary">가격</span>
+              <div className="flex flex-wrap gap-2">
+                <Select
+                  label="강화 기준"
+                  selectItems={enhanceSelectItem}
+                  onSelctCallback={(value: string) =>
+                    setFilterStatus((pre) => ({
+                      ...pre,
+                      filterCondition: `bp${value}`,
+                    }))
+                  }
+                  className="w-[80px]"
+                />
+                <div className="relative">
+                  <Input
+                    name="BP"
+                    type="number"
+                    className="w-[150px]"
+                    placeholder="최대"
+                    min={0}
+                    max={100000000}
+                    onChange={(e) => {
+                      const temp = e.currentTarget.value;
+                      setFilterStatus((pre) => ({ ...pre, value: temp }));
+                    }}
+                  />
+                  <div className="absolute z-10 -translate-y-1/2 right-1 text-muted-foreground top-1/2">
+                    억BP
+                  </div>
+                </div>
+                <Button variant="ghost" onClick={onClickAdd}>
+                  추가
                 </Button>
               </div>
-            );
-          }
-          return <></>;
-        })}
-      </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+            </div>
+            {/* 포지션 */}
+            <div>
+              <span className="text-primary">포지션</span>
+              <Select
+                label="포지션"
+                selectItems={positionSelectItem}
+                onSelctCallback={(value: string) =>
+                  onSelctCallback(value, "position")
+                }
+                className="w-[100px]"
+              />
+            </div>
+            {/* 신체 */}
+            <div>
+              <span className="text-primary">신체</span>
+              <div className="flex flex-wrap gap-2">
+                <Select
+                  label="주발"
+                  selectItems={mainfootSelectItem}
+                  onSelctCallback={(value: string) =>
+                    onSelctCallback(value, "mainfoot")
+                  }
+                  className="w-[100px]"
+                />
+                <Select
+                  label="체형"
+                  selectItems={physicalSelectItem}
+                  onSelctCallback={(value: string) =>
+                    onSelctCallback(value, "physical")
+                  }
+                  className="w-[100px]"
+                />
+              </div>
+            </div>
+            {/* 선택된 조건 */}
+            <div>
+              <span className="text-primary">조건</span>
+              <ScrollArea className="w-full h-[40px]">
+                <div className="flex gap-0.5 w-max">
+                  {Object.entries(condition).map(([key, value]) => {
+                    if (key == "enhanceBp") {
+                      const tempValue = value as {
+                        enhance: string;
+                        bp: string;
+                      };
+                      return (
+                        <div
+                          key="enhanceBp"
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${tempValue["enhance"].replace("bp", "")}강 ${
+                            tempValue["bp"]
+                          }억 이하`}
+                          <Button
+                            onClick={() => onClickDelete("enhanceBp")}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    } else if (["affiliation", "feature"].includes(key)) {
+                      const tempKey = key as "affiliation" | "feature";
+                      const tempTeamId = value as string;
+                      return (
+                        <div
+                          key={key}
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${teamcolors[tempKey][parseInt(tempTeamId)].name}`}
+                          <Button
+                            onClick={() => onClickDelete(tempKey)}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    } else if (key === "physical") {
+                      const tempValue = value as string;
+                      return (
+                        <div
+                          key={key}
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${
+                            number2physical[
+                              parseInt(tempValue) as 0 | 1 | 2 | 3 | 4 | 5
+                            ]
+                          }`}
+                          <Button
+                            onClick={() => onClickDelete(key)}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    } else if (key === "mainfoot") {
+                      const tempValue = value as string;
+                      return (
+                        <div
+                          key={key}
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${tempValue === "1" ? "왼발" : "오른발"}`}
+                          <Button
+                            onClick={() => onClickDelete(key)}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    } else {
+                      const tempKey = key as allCondition;
+                      return (
+                        <div
+                          key={key}
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${value}`}
+                          <Button
+                            onClick={() => onClickDelete(tempKey)}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </ScrollArea>
+            </div>
+          </div>
+        </ScrollArea>
+        <DialogFooter>
+          <div className="flex justify-between">
+            <div className="flex gap-0.5">
+              <Button
+                variant="secondary"
+                onClick={() => (
+                  setCookies("condition", condition), alert("고정 완료")
+                )}
+              >
+                고정
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => (
+                  deleteCookies("condition"),
+                  setCondition({}),
+                  alert("초기화 완료")
+                )}
+              >
+                초기화
+              </Button>
+            </div>
+            <DialogClose asChild>
+              <Button>확인</Button>
+            </DialogClose>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

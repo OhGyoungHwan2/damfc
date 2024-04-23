@@ -126,7 +126,7 @@ const Home: React.FC<{
         ])
       );
       return {
-        value: key.toUpperCase(),
+        value: key,
         node: <Stadium positionItems={positionItems} />,
       };
     });

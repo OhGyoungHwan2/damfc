@@ -32,7 +32,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
           </section>
           <section className="px-[16px]">
             <div className="grid grid-cols-2">
-              <div className="grid grid-cols-6 Medium:grid-cols-9">
+              <div className="grid grid-cols-9 Medium:grid-cols-9">
                 <div className="col-span-3">
                   <SelectStatus type="adaptability" dir="left" />
                 </div>
@@ -52,7 +52,7 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
                   <SelectStatus type="feature" dir="left" />
                 </div>
               </div>
-              <div className="grid grid-cols-6 Medium:grid-cols-9">
+              <div className="grid grid-cols-9 Medium:grid-cols-9">
                 <div className="col-span-3">
                   <SelectStatus type="adaptability" dir="right" />
                 </div>
@@ -80,12 +80,14 @@ const PlayerSpid: React.FC<{ playerResponse: TGETPlayer }> = ({
             </div>
           </section>
         </section>
-        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[306px] Large:w-[612px]">
+        <section className="pl-[16px] Expanded:pl-0 Expanded:w-[306px] Large:w-[612px] relative">
           <PlayerScroll_Provider
             defaultCondition={conditionObj}
             teamcolors={teamcolors}
           >
-            <PlayerScroll_Filter />
+            <div className="absolute z-30 top-1 left-1">
+              <PlayerScroll_Filter />
+            </div>
             <PlayerScroll_Scroll players={[player, ...simPlayers]} />
           </PlayerScroll_Provider>
         </section>

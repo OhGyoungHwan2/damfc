@@ -29,7 +29,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
       <div className="grid grid-cols-2 items-start gap-0.5">
         {[1, 3, 5, 8].map((enhance, idx) => (
           <small key={`bp${enhance}`} className="flex items-center">
-            <Enhancement enhance={enhance} className="px-2" />
+            <Enhancement enhance={enhance} className="w-[24px]" />
             {bp2string(bps[idx] || 0)}
           </small>
         ))}
@@ -38,7 +38,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
   };
 
   const skillmovePoint =
-    player.skillmove + ((enhance || 0) > 4 ? 1 : (enhance || 0) > 7 ? 2 : 0);
+    player.skillmove + ((enhance || 0) > 7 ? 2 : (enhance || 0) > 4 ? 1 : 0);
 
   return (
     <div
