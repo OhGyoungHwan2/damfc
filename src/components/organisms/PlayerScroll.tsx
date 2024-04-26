@@ -189,7 +189,7 @@ export const PlayerScroll_Scroll: React.FC<{
   // 액션
   return (
     <ScrollArea>
-      <div className="grid content-start grid-flow-col grid-rows-1 Medium:grid-rows-2 justify-start Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:items-start Expanded:grid-flow-row Expanded:h-[calc(100dvh-64px)] w-max Expanded:w-[306px] Large:grid-cols-2 Large:w-[612px]">
+      <div className="grid content-start grid-flow-col grid-rows-1 Medium:grid-rows-2 justify-start pb-2 Expanded:grid-rows-none Expanded:grid-cols-1 Expanded:items-start Expanded:grid-flow-row Expanded:h-[calc(100dvh-64px)] w-max Expanded:w-[306px] Large:grid-cols-2 Large:w-[612px]">
         {renderPlayerCard().isRender ? (
           renderPlayerCard().node
         ) : (
@@ -281,120 +281,6 @@ export const PlayerScroll_Filter: React.FC = () => {
     return () => clearTimeout(timeOutId);
   }, [filterStatus["value"]]);
 
-  // return (
-  //   <ScrollArea>
-  //     <div className="flex items-center gap-1 pb-2 w-max">
-  //       <Button
-  //         onClick={() => (
-  //           setCookies("condition", condition), alert("고정 완료")
-  //         )}
-  //       >
-  //         고정
-  //       </Button>
-  //       <Button
-  //         variant="destructive"
-  //         onClick={() => (
-  //           deleteCookies("condition"), setCondition({}), alert("초기화 완료")
-  //         )}
-  //       >
-  //         초기화
-  //       </Button>
-  //       <Select
-  //         label="소속"
-  //         selectItems={affiliationSelectItem}
-  //         onSelctCallback={(value: string) =>
-  //           onSelctCallback(value, "affiliation")
-  //         }
-  //         className="w-[150px]"
-  //       />
-  //       <Select
-  //         label="특성"
-  //         selectItems={featureSelectItem}
-  //         onSelctCallback={(value: string) => onSelctCallback(value, "feature")}
-  //         className="w-[150px]"
-  //       />
-  //       <Select
-  //         label="포지션"
-  //         selectItems={positionSelectItem}
-  //         onSelctCallback={(value: string) =>
-  //           onSelctCallback(value, "position")
-  //         }
-  //         className="w-[100px]"
-  //       />
-  //       <Select
-  //         label="주발"
-  //         selectItems={mainfootSelectItem}
-  //         onSelctCallback={(value: string) =>
-  //           onSelctCallback(value, "mainfoot")
-  //         }
-  //         className="w-[100px]"
-  //       />
-  //       <Select
-  //         label="체형"
-  //         selectItems={physicalSelectItem}
-  //         onSelctCallback={(value: string) =>
-  //           onSelctCallback(value, "physical")
-  //         }
-  //         className="w-[100px]"
-  //       />
-  //       <div className="w-[2px] bg-border mx-4" />
-  //       <Select
-  //         label="강화 기준"
-  //         selectItems={enhanceSelectItem}
-  //         onSelctCallback={(value: string) =>
-  //           setFilterStatus((pre) => ({
-  //             ...pre,
-  //             filterCondition: `bp${value}`,
-  //           }))
-  //         }
-  //         className="w-[100px]"
-  //       />
-  //       <div className="relative">
-  //         <Input
-  //           name="BP"
-  //           type="number"
-  //           className="w-[150px]"
-  //           placeholder="최대"
-  //           min={0}
-  //           max={100000000}
-  //           onChange={(e) => {
-  //             const temp = e.currentTarget.value;
-  //             setFilterStatus((pre) => ({ ...pre, value: temp }));
-  //           }}
-  //         />
-  //         <div className="absolute right-[50px] text-muted-foreground z-10 top-1/2 -translate-y-1/2">
-  //           억BP
-  //         </div>
-  //       </div>
-  //       <Button variant="ghost" onClick={onClickAdd}>
-  //         추가
-  //       </Button>
-  //       {Object.entries(condition).map(([key, value]) => {
-  //         if (key == "enhanceBp") {
-  //           const tempValue = value as { enhance: string; bp: string };
-  //           return (
-  //             <div
-  //               key="enhanceBp"
-  //               className="border-b border-border text-muted-foreground"
-  //             >
-  //               {`${tempValue["enhance"].replace("bp", "")}강 ${
-  //                 tempValue["bp"]
-  //               }억 이하`}
-  //               <Button
-  //                 onClick={() => onClickDelete("enhanceBp")}
-  //                 variant="ghost"
-  //               >
-  //                 X
-  //               </Button>
-  //             </div>
-  //           );
-  //         }
-  //         return <></>;
-  //       })}
-  //     </div>
-  //     <ScrollBar orientation="horizontal" />
-  //   </ScrollArea>
-  // );
   return (
     <Dialog>
       <DialogTrigger asChild>
