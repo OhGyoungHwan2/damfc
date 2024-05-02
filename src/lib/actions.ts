@@ -7,5 +7,7 @@ export async function deleteCookies(name: string) {
 }
 
 export async function setCookies(name: string, data: object) {
-  cookies().set(name, JSON.stringify(data));
+  cookies().set(name, JSON.stringify(data), {
+    maxAge: 10 * 365 * 24 * 60 * 60,
+  });
 }
