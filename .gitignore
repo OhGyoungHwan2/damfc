@@ -40,4 +40,6 @@ README.md
 
 /src/app/test/*
 
-/src/components/templates/Test.tsx
+/src/components/templates/Test*
+
+/src/components/organisms/Test*

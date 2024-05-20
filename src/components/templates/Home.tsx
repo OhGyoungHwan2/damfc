@@ -19,6 +19,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { cn } from "@/lib/utils";
 
 const Home: React.FC<{
   responseRecommend: TGETRecommend;
@@ -78,16 +79,26 @@ const Home: React.FC<{
           className="max-w-full whitespace-nowrap mt-[16px] mb-[24px]"
         >
           <div className="grid grid-rows-2 grid-flow-col w-max gap-y-[16px] gap-x-[32px] Large:gap-x-[64px]">
-            {recommends.map((recommend) => (
+            {recommends.map((recommend, idx) => (
               <Link
                 key={`${recommend.id}Link`}
                 href={`/player/${recommend.playerId}`}
                 target="_blank"
               >
-                <StateLayer className="bg-foreground">
+                <StateLayer className="bg-foreground relative">
                   <ContextMenu>
                     <ContextMenuTrigger>
                       <PlayerCard player={recommend.player} isBp />
+                      <div
+                        className={cn(
+                          "absolute top-0 left-0 bg-secondary rounded-full size-[18px] text-center leading-none",
+                          idx + 1 === 1 && "bg-[#D5A11E]",
+                          idx + 1 === 2 && "bg-[#A3A3A3]",
+                          idx + 1 === 3 && "bg-[#CD7F32]"
+                        )}
+                      >
+                        {idx + 1}
+                      </div>
                     </ContextMenuTrigger>
                     <ContextMenuContent>
                       <ContextMenuItem>

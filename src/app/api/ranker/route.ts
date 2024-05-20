@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 const option = {
-  take: 50,
+  take: 100,
   select: {
     id: true,
     controller: true,
