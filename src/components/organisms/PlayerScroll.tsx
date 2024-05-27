@@ -48,7 +48,7 @@ import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 const CLASSNAME_SELECT =
   "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1";
 
-type allCondition =
+export type allCondition =
   | keyof typeof status
   | keyof typeof statusGK
   | "affiliation"
@@ -59,7 +59,7 @@ type allCondition =
   | "enhanceBp"
   | "position";
 
-type conditionValue =
+export type conditionValue =
   | string
   | {
       enhance: string;
