@@ -20,7 +20,10 @@ import TraitImage from "./TraitImage";
 const Compare: React.FC = () => {
   const { playerLeft, playerRight, leftAddStatus, rightAddStatus } =
     usePlayerCompareContext();
-  const statusKey = playerLeft.position === "GK" ? statusGK : status;
+
+  const { penalties, freekickaccuracy, slidingtackle, ...viewStatus } = status;
+
+  const statusKey = playerLeft.position === "GK" ? statusGK : viewStatus;
 
   // 계산
   const pickStatus = (player: TGETPlayer["player"], keys: string[]) => {

@@ -132,7 +132,7 @@ model player_similarity {
 }
 
 model ranker {
-  id         Int    @id @map("_id")
+  id         String    @id @map("_id")
   controller String
   matchId    String
   nickname   String
@@ -146,7 +146,7 @@ model ranker_player {
   grade    Int
   playerId Int
   position Int
-  rankerId Int
+  rankerId String
 
   ranker ranker @relation(fields: [rankerId], references: [id])
   player player? @relation(fields: [playerId], references: [id])
