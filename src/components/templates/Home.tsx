@@ -1,4 +1,4 @@
-import { TGETRanker } from "@/app/api/ranker/route";
+// import { TGETRanker } from "@/app/api/ranker/route";
 import { TGETRecommend, TRecommend } from "@/app/api/recommend/route";
 import {
   SelectTabs_Provider,
@@ -10,8 +10,8 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import StateLayer from "../atoms/StateLayer";
 import PlayerCard from "../organisms/PlayerCard";
-import Stadium from "../organisms/Stadium";
-import PlayerPosition from "../organisms/PlayerPosition";
+// import Stadium from "../organisms/Stadium";
+// import PlayerPosition from "../organisms/PlayerPosition";
 import { SquadAddPlayer } from "../organisms/SquadMaker";
 import {
   ContextMenu,
@@ -23,13 +23,13 @@ import { cn } from "@/lib/utils";
 
 const Home: React.FC<{
   responseRecommend: TGETRecommend;
-  responseRanker: TGETRanker;
-}> = ({ responseRecommend, responseRanker }) => {
+  // responseRanker: TGETRanker;
+}> = ({ responseRecommend }) => {
   //데이터
   const { positions, seasons, recommendPositions, recommendSeasons } =
     responseRecommend;
-  const { rankers, keyboardRankers, gamepadRankers, etcRankers } =
-    responseRanker;
+  // const { rankers, keyboardRankers, gamepadRankers, etcRankers } =
+  //   responseRanker;
 
   //계산
   const createSelectItems = (values: string[], type?: "season" | "ranker") =>
@@ -44,16 +44,16 @@ const Home: React.FC<{
               alt={`${value}이미지`}
             />
           );
-        if (type === "ranker")
-          return (
-            <small className="text-xs text-nowrap text-muted-foreground">
-              {rankers[value].controller === "keyboard"
-                ? "키보드"
-                : rankers[value].controller === "gamepad"
-                ? "패드"
-                : "기타"}
-            </small>
-          );
+        // if (type === "ranker")
+        //   return (
+        //     <small className="text-xs text-nowrap text-muted-foreground">
+        //       {rankers[value].controller === "keyboard"
+        //         ? "키보드"
+        //         : rankers[value].controller === "gamepad"
+        //         ? "패드"
+        //         : "기타"}
+        //     </small>
+        //   );
         return null;
       };
       return {
@@ -118,30 +118,30 @@ const Home: React.FC<{
     }));
   };
 
-  const createStadiums = (rankerRecord: TGETRanker["rankers"]) => {
-    return Object.entries(rankerRecord).map(([key, rankers]) => {
-      const positionItems = Object.fromEntries(
-        rankers.players.map((player) => [
-          player.position,
-          <Link
-            href={`/player/${player.playerId}`}
-            key={`${player.playerId}Link`}
-            target="_blank"
-          >
-            <PlayerPosition
-              player={player}
-              grade={player.grade}
-              position={player.position}
-            />
-          </Link>,
-        ])
-      );
-      return {
-        value: key,
-        node: <Stadium positionItems={positionItems} />,
-      };
-    });
-  };
+  // const createStadiums = (rankerRecord: TGETRanker["rankers"]) => {
+  //   return Object.entries(rankerRecord).map(([key, rankers]) => {
+  //     const positionItems = Object.fromEntries(
+  //       rankers.players.map((player) => [
+  //         player.position,
+  //         <Link
+  //           href={`/player/${player.playerId}`}
+  //           key={`${player.playerId}Link`}
+  //           target="_blank"
+  //         >
+  //           <PlayerPosition
+  //             player={player}
+  //             grade={player.grade}
+  //             position={player.position}
+  //           />
+  //         </Link>,
+  //       ])
+  //     );
+  //     return {
+  //       value: key,
+  //       node: <Stadium positionItems={positionItems} />,
+  //     };
+  //   });
+  // };
 
   return (
     <section>
@@ -185,7 +185,7 @@ const Home: React.FC<{
         </SelectTabs_Provider>
       </section>
       {/* 랭커 스쿼드 별 SelectTabs */}
-      <section className="relative">
+      {/* <section className="relative">
         <SelectTabs_Provider defaultValue={keyboardRankers[0]}>
           <h3 className="px-[16px] Expanded:px-[62px] Large:px-[106px] pt-[16px] pb-[24px]">
             <small className="text-muted-foreground">{`랭커 스쿼드, 지금 바로 만나보세요!`}</small>
@@ -204,7 +204,7 @@ const Home: React.FC<{
             <SelectTabs_Tabs tabItems={createStadiums(rankers)} />
           </div>
         </SelectTabs_Provider>
-      </section>
+      </section> */}
     </section>
   );
 };
