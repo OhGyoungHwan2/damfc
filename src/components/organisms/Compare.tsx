@@ -23,6 +23,8 @@ const Compare: React.FC = () => {
 
   const { penalties, freekickaccuracy, slidingtackle, ...viewStatus } = status;
 
+  console.log(penalties, freekickaccuracy, slidingtackle);
+
   const statusKey = playerLeft.position === "GK" ? statusGK : viewStatus;
 
   // 계산
