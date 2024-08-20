@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { RadarSliceTooltipProps, ResponsiveRadar } from "@nivo/radar";
 import { useEffect, useState } from "react";
 
@@ -10,6 +11,7 @@ interface Radar1To1Props {
   viewKeys: Record<string, string>;
   target1AddPoint?: Record<string, number>;
   target2AddPoint?: Record<string, number>;
+  isComparePoint?: boolean;
 }
 
 const Radar1To1: React.FC<Radar1To1Props> = ({
@@ -20,6 +22,7 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
   viewKeys,
   target1AddPoint,
   target2AddPoint,
+  isComparePoint = true,
 }) => {
   // 데이터
   const viewKeysKey = Object.keys(viewKeys);
@@ -79,11 +82,16 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
             return undefined;
           }}
           colors={(temp) => {
-            return temp.index == 0 ? "#ffa800" : "#227440";
+            return temp.index == 0 ? "#7d1c1c" : "#22c55e";
           }}
         />
       </div>
-      <div className="grid grid-cols-3 pt-1 text-center text-nowrap">
+      <div
+        className={cn(
+          "grid grid-cols-3 pt-1 text-center text-nowrap",
+          isComparePoint ? "" : "hidden"
+        )}
+      >
         <small className="col-span-2">{`${
           viewKeys[tooltipItems.index]
         }`}</small>

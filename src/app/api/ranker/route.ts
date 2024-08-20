@@ -36,7 +36,10 @@ export type TGETRanker = {
 };
 
 export async function GET() {
-  const rankers = await prisma.ranker.findMany(option);
+  const rankers = await prisma.ranker.findMany({
+    ...option,
+    orderBy: [{ id: "asc" }],
+  });
   const responseRanker = {
     rankers: {},
     keyboardRankers: [],

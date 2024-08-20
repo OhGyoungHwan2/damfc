@@ -57,7 +57,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
           alt={`${player.season}이미지`}
           className="inline-block"
         />
-        <span className="text-base font-extrabold text-foreground text-nowrap">
+        <span className="text-base font-bold text-foreground text-nowrap">
           {player.name}
         </span>
       </div>
