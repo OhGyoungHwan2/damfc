@@ -82,7 +82,7 @@ const Radar1To1: React.FC<Radar1To1Props> = ({
             return undefined;
           }}
           colors={(temp) => {
-            return temp.index == 0 ? "#7d1c1c" : "#22c55e";
+            return temp.index == 0 ? "#fe5858" : "#22c55e";
           }}
         />
       </div>
