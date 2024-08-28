@@ -70,6 +70,7 @@ export async function GET(
               teamcolors: {
                 include: { team: true },
               },
+              info: true,
             },
           },
         },
