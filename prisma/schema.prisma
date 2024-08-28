@@ -116,6 +116,7 @@ model player {
   playerSimilaritySimPlayer       player_similarity[] @relation("simPlayers")
   recommends recommend[]
   rankerPlayer ranker_player[]
+  info player_info? @relation("player")
 
   @@fulltext([name])
 }
@@ -191,4 +192,23 @@ model teamcolor_player {
 
   @@index([playerId], map: "playerId_1")
   @@index([teamColorId], map: "teamColorId_1")
+}
+
+model player_info {
+  id               Int    @id @map("_id")
+  aerialBallRate Float?
+  assistance Float?
+  blockRate Float?
+  defenseRate Float?
+  dribbleRate Float?
+  effectiveShooting Float?
+  grade Float?
+  interception Float?
+  participation Int?
+  passRate Float?
+  score Float?
+  shooting Float?
+  tackleRate Float?
+
+  player player @relation(fields: [id], references: [id], name: "player")
 }
