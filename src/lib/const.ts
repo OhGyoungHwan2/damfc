@@ -207,6 +207,38 @@ export const traitKey2kr = {
   trait49: "GK 적극적 크로스 수비",
 } as const;
 
+export const info2kr = {
+  participation: "출전",
+  score: "득점",
+  assistance: "도움",
+  effectiveShooting: "유효 슈팅",
+  shooting: "일반 슈팅",
+  passRate: "패스 성공률",
+  dribbleRate: "드리블 성공률",
+  aerialBallRate: "공중볼 경합 성공률",
+  interception: "가로채기",
+  tackleRate: "태클 성공률",
+  blockRate: "차단 성공률",
+  defenseRate: "선방 (골차단)",
+  grade: "평점",
+} as const;
+
+export const info2krTest = {
+  participation: "출전",
+  score: "득점",
+  assistance: "도움",
+  effectiveShooting: "유효슛",
+  shooting: "슈팅",
+  passRate: "패스",
+  dribbleRate: "드리블",
+  aerialBallRate: "공중볼",
+  interception: "가로채기",
+  tackleRate: "태클",
+  blockRate: "차단",
+  defenseRate: "선방",
+  grade: "평점",
+} as const;
+
 export type TAllStatus = keyof typeof status | keyof typeof statusGK | "all";
 export type TAddStatus = Partial<Record<TAllStatus, number>>;
 export type TAddStatusSelectCategory =

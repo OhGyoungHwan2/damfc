@@ -3,8 +3,14 @@
 import { Roboto_Mono } from "next/font/google";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { usePlayerCompareContext } from "@/context/store";
-import { TSelectAddStatus, statusOrder, status, statusGK } from "@/lib/const";
-import { bp2string, point2color } from "@/lib/cssfuntion";
+import {
+  TSelectAddStatus,
+  statusOrder,
+  status,
+  statusGK,
+  info2kr,
+} from "@/lib/const";
+import { bp2string, info2color, point2color } from "@/lib/cssfuntion";
 import { cn } from "@/lib/utils";
 import Enhancement from "../molecules/Enhancement";
 
@@ -119,6 +125,52 @@ const CompareTable: React.FC = () => {
                 className={cn("text-right w-[70px] text-foreground text-sm")}
               >
                 <span>{bp2string(playerRight[key] || 0)}</span>
+              </div>
+            </div>
+          );
+        })}
+        {/* 경기 정보 */}
+        {(
+          [
+            "participation",
+            "score",
+            "assistance",
+            "effectiveShooting",
+            "shooting",
+            "passRate",
+            "dribbleRate",
+            "aerialBallRate",
+            "interception",
+            "tackleRate",
+            "blockRate",
+            "defenseRate",
+            "grade",
+          ] as const
+        ).map((key) => {
+          return (
+            <div key={key} className="flex gap-1">
+              <div
+                className={cn(
+                  "text-right w-[50px] Large:w-[70px]",
+                  robotoMono.className
+                )}
+              >
+                <span className={info2color(key, playerLeft.info?.[key])}>
+                  {playerLeft.info?.[key]}
+                </span>
+              </div>
+              <div className="text-center w-[120px] justify-self-center">
+                {info2kr[key]}
+              </div>
+              <div
+                className={cn(
+                  "text-left w-[50px] Large:w-[70px]",
+                  robotoMono.className
+                )}
+              >
+                <span className={info2color(key, playerRight.info?.[key])}>
+                  {playerRight.info?.[key]}
+                </span>
               </div>
             </div>
           );

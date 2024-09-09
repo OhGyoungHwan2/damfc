@@ -1,3 +1,5 @@
+import { info2kr } from "./const";
+
 const BPUNITS = ["만", "억", "조", "경"];
 
 export function bp2string(number?: number | null) {
@@ -70,5 +72,44 @@ export function point2color(point: number) {
       return "text-[#11caaa]";
     default:
       return " text-muted-foreground";
+  }
+}
+
+export function info2color(category: keyof typeof info2kr, point: number = 0) {
+  const infoPanel = {
+    participation: [148.0, 232.0, 346.5, 520.0, 791.5, 1228.0, 2259.0, 46461.0],
+    score: [0.0, 0.0, 0.0, 0.1, 0.2, 0.3, 0.3, 1.1],
+    assistance: [0.0, 0.0, 0.1, 0.1, 0.2, 0.2, 0.2, 0.5],
+    effectiveShooting: [0.0, 0.0, 0.1, 0.4, 0.5, 0.6, 0.8, 1.7],
+    shooting: [0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.2, 0.4],
+    passRate: [80.3, 83.7, 85.4, 86.9, 88.5, 90.2, 93.2, 96.7],
+    dribbleRate: [86.0, 87.2, 88.7, 90.1, 91.1, 93.6, 95.3, 100.0],
+    aerialBallRate: [2.6, 3.6, 4.2, 4.8, 5.3, 6.0, 7.3, 100.0],
+    interception: [0.3, 0.4, 0.4, 0.5, 0.6, 0.6, 0.7, 1.2],
+    tackleRate: [56.6, 61.0, 63.2, 64.8, 66.3, 67.6, 69.2, 200.0],
+    blockRate: [0.0, 1.2, 2.0, 2.7, 3.8, 5.6, 10.7, 19.0],
+    defenseRate: [0.1, 0.1, 0.2, 0.3, 0.6, 0.8, 1.1, 4.3],
+    grade: [6.4, 6.5, 6.5, 6.6, 6.6, 6.7, 6.8, 7.9],
+  };
+
+  switch (true) {
+    case point < infoPanel[category][0]:
+      return "text-[#606972]";
+    case point < infoPanel[category][1]:
+      return "text-[#8f96a0]";
+    case point < infoPanel[category][2]:
+      return "text-[#2194d6]";
+    case point < infoPanel[category][3]:
+      return "text-[#175dde]";
+    case point < infoPanel[category][4]:
+      return "text-[#6e3bff]";
+    case point < infoPanel[category][5]:
+      return "text-[#b33bff]";
+    case point < infoPanel[category][6]:
+      return "text-[#cf13c0]";
+    case point < infoPanel[category][7]:
+      return "text-[#dc0000]";
+    default:
+      return " text-[#c99b00]";
   }
 }

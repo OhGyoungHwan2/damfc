@@ -18,11 +18,13 @@ export type TGETPlayer = {
       affiliation: number[];
       feature: number[];
     };
+    info?: Record<string, number>;
   };
   simPlayers: simPlayer[];
   teamcolors: {
     affiliation: Record<number, TTeam>;
     feature: Record<number, TTeam>;
+    info?: Record<string, number>;
   };
 };
 
