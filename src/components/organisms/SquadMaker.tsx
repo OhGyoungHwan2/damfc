@@ -180,10 +180,10 @@ const SquadMaker: React.FC = () => {
               <span className="text-muted-foreground font-bold">총 급여</span>
               <span
                 className={
-                  allPay > 260 ? "text-destructive" : "text-foreground"
+                  allPay > 270 ? "text-destructive" : "text-foreground"
                 }
               >
-                {`${allPay}/260`}
+                {`${allPay}/270`}
               </span>
             </div>
             <div className="w-full flex justify-between">
