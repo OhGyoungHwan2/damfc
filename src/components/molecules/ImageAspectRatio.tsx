@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ImageAspectRatioProps {
   width: number | string;
@@ -15,9 +16,10 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
   alt,
   className = "",
 }) => {
+  const [isError,setIsError] = useState(false)
   return (
     <div className="relative flex-shrink-0" style={{ width: width }}>
-      <Image
+      {isError ? <div className={cn("w-full h-auto", className)} /> :<Image
         width={0}
         height={0}
         sizes="100vw"
@@ -25,12 +27,10 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
         className={cn("w-full h-auto", className)}
         alt={alt}
         placeholder={"empty"}
-        onError={(e) => {
-          e.currentTarget.onerror = null;
-          e.currentTarget.src =
-            "https://github.com/OhGyoungHwan2/damfc/blob/main/public/player/not_found.AVIF?raw=true";
-        }}
-      />
+        onError={(e)=>{
+          setIsError(true)
+        }} />
+  }
     </div>
   );
 };
