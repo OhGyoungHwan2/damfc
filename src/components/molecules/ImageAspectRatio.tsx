@@ -28,6 +28,7 @@ const ImageAspectRatio: React.FC<ImageAspectRatioProps> = ({
         alt={alt}
         placeholder={"empty"}
         onError={(e)=>{
+          console.log(e)
           setIsError(true)
         }} />
   }
