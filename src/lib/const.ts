@@ -153,8 +153,11 @@ export const enhance = {
   "6": { all: 8 },
   "7": { all: 11 },
   "8": { all: 15 },
-  "9": { all: 19 },
-  "10": { all: 24 },
+  "9": { all: 17 },
+  "10": { all: 19 },
+  "11": { all: 21 },
+  "12": { all: 24 },
+  "13": { all: 27 },
 } as const;
 
 export const adaptability = {
@@ -171,6 +174,8 @@ export const enhanceTeamcolor = {
   "은빛 물결 LV.2": { all: 3 },
   "금빛 물결 LV.1": { all: 3 },
   "금빛 물결 LV.2": { all: 4 },
+  "백금빛 물결 LV.1": { all: 4 },
+  "백금빛 물결 LV.2": { all: 5 },
 };
 
 export const traitKey2kr = {

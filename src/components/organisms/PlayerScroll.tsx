@@ -36,7 +36,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { TGETPlayer } from "@/app/api/player/[spid]/route";
 import StateLayer from "@/components/atoms/StateLayer";
 import { Button } from "@/components/ui/button";
-import { number2physical, positions, status, statusGK } from "@/lib/const";
+import { adaptability, enhance, number2physical, positions, status, statusGK, statusOrder } from "@/lib/const";
 import { usePlayerCompareContext } from "@/context/store";
 import { deleteCookies, setCookies } from "@/lib/actions";
 import PlayerCard from "./PlayerCard";
@@ -57,6 +57,7 @@ export type allCondition =
   | "weakfoot"
   | "physical"
   | "enhanceBp"
+  | "statusMin"
   | "position";
 
 export type conditionValue =
@@ -66,9 +67,10 @@ export type conditionValue =
       bp: string;
     }
   | {
-      min: string;
-      max: string;
-    };
+    statusKey: typeof statusOrder[number];
+    minValue: string;
+  }
+  ;
 
 export type TCondition = Partial<Record<allCondition, conditionValue>>;
 
@@ -145,9 +147,15 @@ export const PlayerScroll_Scroll: React.FC<{
               | "bp10";
             const tempBp = tempValue["bp"];
             return (player[tempEnhance] || 0) / 1000 <= parseInt(tempBp);
-          } else if ("position" == key) {
+          } else if ("position" === key) {
             const tempValue = value;
             return player.position === tempValue;
+          } else if ("statusMin" === key) {
+            const tempValue = value as {
+              statusKey: typeof statusOrder[number];
+              minValue: string;
+            };
+            return (player[tempValue["statusKey"]] || 0) >= parseInt(tempValue["minValue"]);
           }
           return true;
         });
@@ -210,6 +218,12 @@ export const PlayerScroll_Filter: React.FC = () => {
     value: "",
   });
 
+  const [addPoint, setAddPoint] = useState({
+    enhance:0,
+    teamColor:0,
+    adaptability:0,
+  })
+
   const { condition, setCondition, teamcolors } = usePlayerScrollContext();
 
   const affiliationSelectItem = Object.entries(teamcolors.affiliation)
@@ -246,9 +260,21 @@ export const PlayerScroll_Filter: React.FC = () => {
       text: name,
     })
   );
-  const enhanceSelectItem = [...Array(10).keys()].map((key) => ({
+  const enhanceSelectItem = [...Array(13).keys()].map((key) => ({
     value: `${key + 1}`,
     node: <div key={key}>{key + 1}</div>,
+  }));
+  const adaptabilitySelectItem = [...Array(5).keys()].map((key) => ({
+    value: `${key + 1}`,
+    node: <div key={key}>{key + 1}</div>,
+  }));
+  const teamColorSelectItem = [...Array(9).keys()].map((key) => ({
+    value: `${key + 1}`,
+    node: <div key={key}>{key + 1}</div>,
+  }));
+  const statusSelectItem = statusOrder.map((key) => ({
+    value: `${key}`,
+    node: <div key={key}>{{...status,...statusGK}[key]}</div>,
   }));
   // 계산
 
@@ -261,12 +287,20 @@ export const PlayerScroll_Filter: React.FC = () => {
         })
       : setCondition((pre) => ({ ...pre, [type]: value.toUpperCase() }));
   };
-  const onClickAdd = () =>
+  const onClickAdd = (type:"bp"|"minValue") =>
+    type == "bp" ?
     setCondition((pre) => ({
       ...pre,
       enhanceBp: {
         enhance: filterStatus["filterCondition"],
         bp: filterStatus["value"],
+      },
+    })):setCondition((pre) => ({
+      ...pre,
+      statusMin: {
+        statusKey: filterStatus["filterCondition"] as typeof statusOrder[number],
+    minValue: `${(parseInt(filterStatus["value"])-Object.values(addPoint).reduce((accumulator, currentValue) => accumulator + currentValue,
+    0,))}`,
       },
     }));
 
@@ -351,7 +385,65 @@ export const PlayerScroll_Filter: React.FC = () => {
                     억BP
                   </div>
                 </div>
-                <Button variant="ghost" onClick={onClickAdd}>
+                <Button variant="ghost" onClick={()=>onClickAdd("bp")}>
+                  추가
+                </Button>
+              </div>
+            </div>
+            {/* 최소 능력치 */}
+            <div>
+              <span className="text-primary">최소 능력치</span>
+              <div className="flex flex-wrap gap-2">
+                <Select
+                  label="강화 기준"
+                  selectItems={enhanceSelectItem}
+                  onSelctCallback={(value: string) =>
+                    setAddPoint(pre=>{return{...pre, enhance:enhance[value as "1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"]["all"]}})
+                  }
+                  className="w-[80px]"
+                />
+                <Select
+                  label="적응도 기준"
+                  selectItems={adaptabilitySelectItem}
+                  onSelctCallback={(value: string) =>
+                    setAddPoint(pre=>{return{...pre, adaptability:adaptability[value as "1"|"2"|"3"|"4"|"5"]["all"]}})
+                  }
+                  className="w-[80px]"
+                />
+                <Select
+                  label="팀컬러 기준"
+                  selectItems={teamColorSelectItem}
+                  onSelctCallback={(value: string) =>
+                    setAddPoint(pre=>{return{...pre, teamColor:parseInt(value)}})
+                  }
+                  className="w-[80px]"
+                />
+                <Select
+                  label="세부 능력치"
+                  selectItems={statusSelectItem}
+                  onSelctCallback={(value: string) =>
+                    setFilterStatus((pre) => ({
+                      ...pre,
+                      filterCondition: `${value}`,
+                    }))
+                  }
+                  className="w-[80px]"
+                />
+                <div className="relative">
+                  <Input
+                    name="status"
+                    type="number"
+                    className="w-[150px]"
+                    placeholder="최소"
+                    min={0}
+                    max={200}
+                    onChange={(e) => {
+                      const temp = e.currentTarget.value;
+                      setFilterStatus((pre) => ({ ...pre, value: temp }));
+                    }}
+                  />
+                </div>
+                <Button variant="ghost" onClick={()=>onClickAdd("minValue")}>
                   추가
                 </Button>
               </div>
@@ -464,6 +556,25 @@ export const PlayerScroll_Filter: React.FC = () => {
                           {`${tempValue === "1" ? "왼발" : "오른발"}`}
                           <Button
                             onClick={() => onClickDelete(key)}
+                            variant="ghost"
+                          >
+                            X
+                          </Button>
+                        </div>
+                      );
+                    } else if (key == "statusMin") {
+                      const tempValue = value as {
+                        statusKey: typeof statusOrder[number];
+                        minValue: string;
+                      };
+                      return (
+                        <div
+                          key="statusMin"
+                          className="border-b border-border text-muted-foreground"
+                        >
+                          {`${{...status,...statusGK}[tempValue["statusKey"]]} 최소값`}
+                          <Button
+                            onClick={() => onClickDelete("statusMin")}
                             variant="ghost"
                           >
                             X

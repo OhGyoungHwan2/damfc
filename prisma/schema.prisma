@@ -19,6 +19,9 @@ model player {
   bp1              Int?
   /// Multiple data types found: Int: 12.6%, BigInt: 87.4% out of 397 sampled entries
   bp10             Int?
+  bp11             Int?
+  bp12             Int?
+  bp13             Int?
   /// Multiple data types found: Int: 90.9%, BigInt: 9.1% out of 397 sampled entries
   bp2              Int?
   /// Multiple data types found: Int: 88.9%, BigInt: 11.1% out of 397 sampled entries

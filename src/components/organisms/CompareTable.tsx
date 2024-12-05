@@ -108,6 +108,9 @@ const CompareTable: React.FC = () => {
             "bp8",
             "bp9",
             "bp10",
+            "bp11",
+            "bp12",
+            "bp13"
           ] as const
         ).map((key) => {
           return (

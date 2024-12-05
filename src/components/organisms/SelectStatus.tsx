@@ -50,7 +50,9 @@ const SelectStatus: React.FC<SelectStatusProps> = ({ dir, type }) => {
 
   const getEnhanceSlice = () => {
     if (addStatus.enhance?.all) {
-      return addStatus.enhance?.all >= 15
+      return addStatus.enhance?.all >= 21
+        ? 7:
+      addStatus.enhance?.all >= 15
         ? 5
         : addStatus.enhance?.all >= 6
         ? 3
