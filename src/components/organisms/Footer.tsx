@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="flex flex-col gap-2">
           <p className="border-b border-foreground">MongoDB / Vercel</p>
-          <span>마지막 업데이트: 2024.12.11</span>
+          <span>마지막 업데이트: 2024.12.20</span>
           <span className="text-muted-foreground">
             데이터는 1주 단위로 업데이트 됩니다.
           </span>
